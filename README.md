@@ -12,20 +12,24 @@ classes, and asynchronous JavaScript with fetch and promises.
 Each topic has the theory, a pointer to where it was used in coursework,
 and a list of probable exam questions with answers.
 
+Sections 16 and 17 work through a past MITM 305 midterm paper question by
+question, including the box model calculation, and add further practice
+questions in the same style.
+
 ## Contents of this repo
 
 | File | What it is |
 |---|---|
 | `index.html` | The interactive notes site |
 | `midterm-notes.md` | Source notes in markdown |
-| `IWP-Midterm-Notes.pdf` | Printable version, 36 pages |
+| `IWP-Midterm-Notes.pdf` | Printable version, 50 pages |
 | `build.py` | Regenerates `index.html` from the markdown |
 
 ## Features of the site
 
 - Full-text search across all sections, with match highlighting (press `/`)
 - Collapsible sections, and an expand/collapse-all control
-- A flashcard quiz with 80 cards generated from the question lists
+- A flashcard quiz with 101 cards generated from the question lists
 - Light and dark themes, remembered between visits
 - Reading progress indicator
 - Copy buttons on every code block

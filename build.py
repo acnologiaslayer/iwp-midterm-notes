@@ -56,29 +56,47 @@ for raw in section_raws:
 
     slug = slugify(heading)
 
-    # Pull "Probable questions" bullets out for the quiz.
+    def clean(t):
+        t = re.sub(r"\s+", " ", t).strip()
+        return re.sub(r"[`*_]", "", t)
+
+    def add_card(question, answer):
+        q = clean(question)
+        raw = answer.strip()
+
+        # A table or code block does not survive being flattened into one
+        # line, so send the reader to the section instead of showing mush.
+        if raw.startswith("|") or raw.startswith("```") or raw.startswith("css") \
+           or raw.startswith("js") or raw.startswith("html"):
+            a = "Worked answer with a table or code block: open section "  + (number or "") + ", " + title + "."
+        else:
+            a = clean(answer) or "See the section notes."
+
+        if len(q) > 3 and not any(c["q"] == q for c in quiz):
+            quiz.append({"q": q, "a": a, "topic": title, "slug": slug})
+
+    # Format 1: "### Probable questions" bullets, "- *Question?* Answer."
     q_match = re.search(
         r"### Probable questions\s*\n(.*?)(?=\n###|\Z)", body, re.DOTALL
     )
     if q_match:
-        block = q_match.group(1)
-        # bullets look like: - *Question?* Answer text.
-        for m in re.finditer(r"^-\s+(.*?)$", block, re.MULTILINE):
-            line = m.group(1).strip()
-            qm = re.match(r"\*(.+?)\*\s*(.*)$", line)
+        for m in re.finditer(r"^-\s+(.*?)$", q_match.group(1), re.MULTILINE):
+            qm = re.match(r"\*(.+?)\*\s*(.*)$", m.group(1).strip())
             if qm:
-                question = qm.group(1).strip()
-                answer = qm.group(2).strip()
-                if not answer:
-                    answer = "See the section notes above."
-                quiz.append(
-                    {
-                        "q": re.sub(r"[`*_]", "", question),
-                        "a": re.sub(r"[`*_]", "", answer) or "See notes.",
-                        "topic": title,
-                        "slug": slug,
-                    }
-                )
+                add_card(qm.group(1), qm.group(2))
+
+    # Format 2: past-paper style, "**Q. Question?**" then the answer below,
+    # continuing until a blank line followed by something that is not prose.
+    for m in re.finditer(
+        r"^\*\*Q\.\s*(.+?)\*\*\s*\n(.*?)(?=\n\s*\n|\n```|\Z)",
+        body,
+        re.DOTALL | re.MULTILINE,
+    ):
+        add_card(m.group(1), m.group(2))
+
+    # Worked exam answers (### Q1 ... ### Q6) are deliberately NOT turned into
+    # flashcards: each is a multi-part answer with tables and code, which does
+    # not compress into a single card. Read them in full in section 16.
 
     sections.append(
         {

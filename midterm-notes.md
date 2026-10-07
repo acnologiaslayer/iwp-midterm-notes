@@ -23,6 +23,8 @@ assignment where you already wrote it, then lists likely exam questions.
 13. [Asynchronous JS: fetch & Promises](#13-asynchronous-js-fetch--promises) — A12
 14. [Quick-reference tables](#14-quick-reference-tables)
 15. [Exam strategy](#15-exam-strategy)
+16. [Past paper, worked answers](#16-past-paper-worked-answers) — MITM 305
+17. [More likely questions in this paper's style](#17-more-likely-questions-in-this-papers-style)
 
 ---
 
@@ -1054,6 +1056,596 @@ often worth easy marks.
 - A10 — why one delegated listener instead of per-item listeners
 - A11 — why the drop handler changes data rather than moving DOM nodes
 - A12 — why `response.ok` must be checked manually
+
+---
+
+## 16. Past paper, worked answers
+
+**MITM 305: Web Technology and Internet Computing** — Midterm, 1 hour, 20 marks
+(Executive MIT, IIT, University of Dhaka)
+
+Six questions in 60 minutes is **10 minutes each**. Marks are 3/3/4/3/4/3, so
+the two 4-mark questions (the box model calculation and the DOM methods) deserve
+the most time.
+
+---
+
+### Q1. Differences between GET and POST. Create a link in HTML. `[3]`
+
+| | GET | POST |
+|---|---|---|
+| Data location | Appended to the URL as a query string | Inside the request body |
+| Visibility | Visible in the address bar and browser history | Not visible in the URL |
+| Length limit | Practically ~2048 characters | No practical limit |
+| Caching / bookmarking | Cached, bookmarkable, re-submittable | Not cached or bookmarked |
+| Idempotent | Yes, repeating it changes nothing | No, repeating may duplicate the action |
+| Typical use | Searches, filters, pagination | Logins, registration, file uploads |
+| Data types | ASCII text only | Text and binary (`multipart/form-data`) |
+
+```html
+<form action="/search" method="get">   <!-- /search?q=css -->
+<form action="/login" method="post">   <!-- data hidden in the body -->
+```
+
+**Creating a link:**
+
+```html
+<a href="https://iit.du.ac.bd">Institute of Information Technology</a>
+
+<a href="about.html">About</a>                  <!-- same folder -->
+<a href="#contact">Contact</a>                  <!-- same page -->
+<a href="mailto:info@iit.du.ac.bd">Email us</a> <!-- opens mail client -->
+<a href="report.pdf" download>Download</a>      <!-- forces a download -->
+<a href="https://x.com" target="_blank" rel="noopener">New tab</a>
+```
+
+`<a>` is the **anchor** element and `href` is the **h**ypertext **ref**erence.
+Note that a link always issues a GET request; to send POST you need a form.
+
+> **Exam tip.** The link part is one easy mark. Write one absolute and one
+> relative example, and name `href` as the attribute.
+
+---
+
+### Q2. Arrow functions and function expressions. Examples of both. `[3]`
+
+A **function expression** assigns an anonymous function to a variable. Only the
+variable is hoisted, not the function, so it must be defined before it is used.
+
+```js
+var add = function (a, b) {
+  return a + b;
+};
+console.log(add(2, 3));   // 5
+```
+
+An **arrow function** is a shorter form introduced in ES6. With a single
+expression body, the braces and `return` can be omitted.
+
+```js
+const add = (a, b) => a + b;          // implicit return
+const square = x => x * x;            // one parameter needs no brackets
+const greet = () => console.log('Hi');// no parameters need empty brackets
+const makeUser = (n) => ({ name: n }); // object literal needs wrapping ()
+```
+
+**The three differences that earn the marks:**
+
+| | Function expression | Arrow function |
+|---|---|---|
+| `this` | Its own, decided by the call site | Inherited from the enclosing scope |
+| `arguments` object | Available | Not available |
+| Usable as a constructor | Yes, with `new` | No, throws a TypeError |
+
+The `this` difference matters in practice:
+
+```js
+button.addEventListener('click', function () {
+  console.log(this);   // the button element
+});
+
+button.addEventListener('click', () => {
+  console.log(this);   // the surrounding scope, NOT the button
+});
+```
+
+So an arrow is ideal for short callbacks (`arr.map(x => x * 2)`), but wrong when
+you need `this` to refer to the element or object.
+
+---
+
+### Q3. Box model calculation. `[4]`
+
+```css
+.box {
+  width: 250px;            /* content width */
+  height: 100px;           /* content height */
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 20px;
+  padding-left: 5px;
+  border-top: 2px solid red;
+  border-right: 4px solid green;
+  border-bottom: 6px solid blue;
+  border-left: 8px solid orange;
+  margin: 20px;
+  box-sizing: content-box;  /* default */
+}
+```
+
+#### (a) Total width and height with `content-box`
+
+With `content-box`, `width` and `height` describe **only the content area**.
+Padding and border are added on top.
+
+**Width:**
+
+```
+content           250
+padding-left        5
+padding-right      15
+border-left         8
+border-right        4
+                 ----
+visible box       282 px
+margin-left        20
+margin-right       20
+                 ----
+total space       322 px
+```
+
+**Height:**
+
+```
+content           100
+padding-top        10
+padding-bottom     20
+border-top          2
+border-bottom       6
+                 ----
+visible box       138 px
+margin-top         20
+margin-bottom      20
+                 ----
+total space       178 px
+```
+
+> **Answer:** the rendered (visible) box is **282px × 138px**. The total space
+> occupied on the page, including margins, is **322px × 178px**.
+
+State both figures and label them. The question says "considering the total
+space taken on a page", which points at the margin-inclusive answer, but the
+282 × 138 box is what you actually see, so give both and say which is which.
+
+Note margins are **outside** the box and transparent. Also, if a vertical
+neighbour has its own margin, **margin collapsing** means the gap is the larger
+of the two rather than their sum.
+
+#### (b) Changing to `box-sizing: border-box`
+
+Now `width` and `height` describe the **whole visible box**, so padding and
+border are subtracted from the inside and the content shrinks.
+
+**Width:** the box stays at the declared `250px`.
+
+```
+declared width    250
+minus padding     -20   (5 + 15)
+minus border      -12   (8 + 4)
+                 ----
+content width     218 px
+```
+
+**Height:** the box stays at the declared `100px`.
+
+```
+declared height   100
+minus padding     -30   (10 + 20)
+minus border       -8   (2 + 6)
+                 ----
+content height     62 px
+```
+
+| | `content-box` | `border-box` |
+|---|---|---|
+| Content | 250 × 100 | 218 × 62 |
+| Visible box | 282 × 138 | **250 × 100** |
+| With margins | 322 × 178 | 290 × 140 |
+
+**How it affects the calculation:** the visible box shrinks by 32px wide and
+38px tall, because the declared size now *includes* the padding and border
+instead of excluding them. The declared width becomes the rendered width, so no
+arithmetic is needed to predict the layout. Margins are still excluded under
+both models.
+
+This is exactly why `* { box-sizing: border-box; }` is set globally in most
+stylesheets, including Assignment 04.
+
+---
+
+### Q4. `let`, `var` and `const`: scope, hoisting, re-declaration. `[3]`
+
+| | `var` | `let` | `const` |
+|---|---|---|---|
+| **Scope** | Function-scoped (ignores blocks) | Block-scoped | Block-scoped |
+| **Hoisting** | Hoisted and initialised to `undefined` | Hoisted but in the Temporal Dead Zone | Same as `let` |
+| **Re-declaration** | Allowed in the same scope | Not allowed | Not allowed |
+| **Re-assignment** | Allowed | Allowed | **Not allowed** |
+| **Needs initialiser** | No | No | **Yes** |
+
+**Scope:**
+
+```js
+if (true) {
+  var a = 1;
+  let b = 2;
+}
+console.log(a);   // 1       — var leaked out of the block
+console.log(b);   // ReferenceError — let stayed inside
+```
+
+**Hoisting:**
+
+```js
+console.log(x);   // undefined      — var is hoisted and pre-set
+var x = 5;
+
+console.log(y);   // ReferenceError — y exists but is in the TDZ
+let y = 5;
+```
+
+The **Temporal Dead Zone** is the gap between entering the scope and the
+declaration being evaluated. `let` and `const` are hoisted, but reading them in
+that gap throws instead of giving `undefined`, which catches bugs early.
+
+**Re-declaration:**
+
+```js
+var p = 1; var p = 2;   // fine, silently overwrites
+let q = 1; let q = 2;   // SyntaxError: already declared
+```
+
+**One subtlety worth a mark:** `const` prevents **re-assignment**, not mutation.
+
+```js
+const list = [1, 2];
+list.push(3);        // allowed, the array contents changed
+list = [9];          // TypeError, the binding cannot be reassigned
+```
+
+**Rule of thumb:** `const` by default, `let` when the value must change, and
+avoid `var` in new code.
+
+---
+
+### Q5. Five DOM manipulation methods. `[4]`
+
+Four marks suggests one mark per method with a brief description, so give five
+and say what each does.
+
+| Method | What it does |
+|---|---|
+| `document.createElement(tag)` | Creates a new element node in memory |
+| `parent.appendChild(node)` | Adds a node as the last child of a parent |
+| `element.remove()` | Removes the element from the DOM |
+| `element.setAttribute(name, value)` | Sets an attribute such as `href` or `id` |
+| `element.classList.add('x')` | Adds a CSS class (also `.remove`, `.toggle`, `.contains`) |
+
+Extras if more are wanted: `insertBefore()`, `replaceChild()`, `cloneNode()`,
+`querySelector()` / `querySelectorAll()`, `getElementById()`,
+`removeAttribute()`, `insertAdjacentHTML()`.
+
+**A short example tying them together** (this is the Assignment 10 pattern):
+
+```js
+const li = document.createElement('li');       // 1. create
+li.textContent = 'Learn JavaScript';           // 2. set text safely
+li.classList.add('task-item');                 // 3. add a class
+li.setAttribute('data-id', '1');               // 4. set an attribute
+document.getElementById('list').appendChild(li); // 5. insert into the page
+
+li.remove();                                   // 6. remove it again
+```
+
+**Properties worth naming alongside the methods:** `textContent` inserts plain
+text and escapes markup, while `innerHTML` parses its input and is therefore an
+XSS risk with user-typed content. Prefer `textContent`.
+
+> **Exam tip.** Selecting methods (`getElementById`, `querySelector`) are
+> sometimes counted as DOM manipulation and sometimes as DOM *access*. Listing a
+> mix of create/insert/modify/remove methods is the safer answer.
+
+---
+
+### Q6. Creating a Promise. The same thing with async/await. `[3]`
+
+**Creating one with the constructor.** It takes an executor function receiving
+`resolve` and `reject`:
+
+```js
+function checkAge(age) {
+  return new Promise(function (resolve, reject) {
+    if (age >= 18) {
+      resolve('Access granted');      // fulfilled
+    } else {
+      reject(new Error('Too young')); // rejected
+    }
+  });
+}
+```
+
+**Consuming it with the chain:**
+
+```js
+checkAge(20)
+  .then(function (msg)   { console.log(msg); })     // on success
+  .catch(function (err)  { console.log(err.message); }) // on failure
+  .finally(function ()   { console.log('Done'); });     // always
+```
+
+A promise has three states: **pending**, then either **fulfilled** or
+**rejected**. Once settled it never changes again.
+
+**The same logic with async/await:**
+
+```js
+async function run() {
+  try {
+    const msg = await checkAge(20);   // waits for the promise to settle
+    console.log(msg);
+  } catch (err) {                      // replaces .catch()
+    console.log(err.message);
+  } finally {                          // replaces .finally()
+    console.log('Done');
+  }
+}
+run();
+```
+
+**The mapping to state clearly:**
+
+| Promise chain | async/await |
+|---|---|
+| `.then(v => ...)` | `const v = await p;` |
+| `.catch(e => ...)` | `catch (e) { }` |
+| `.finally(() => ...)` | `finally { }` |
+
+Two facts worth adding:
+
+1. `await` only works **inside an `async` function**, and an `async` function
+   **always returns a promise**.
+2. async/await is only syntax over the same promises. It does not replace them,
+   it just makes sequential async code read like synchronous code.
+
+**A realistic example** (Assignment 12):
+
+```js
+fetch(url)
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(showData)
+  .catch(showError)
+  .finally(hideSpinner);
+```
+
+Remember `fetch` does **not** reject on a 404 or 500, which is why `response.ok`
+is checked by hand.
+
+---
+
+## 17. More likely questions in this paper's style
+
+The paper above mixes definitions, comparisons, a calculation and short code.
+These follow the same shapes.
+
+### Comparison questions (worth 3 marks each)
+
+**Q. Difference between `id` and `class` in CSS and HTML.**
+`id` is unique to one element per page, selected with `#`, specificity 0,1,0,0
+and usable as a link fragment (`#top`) or with `getElementById`. `class` is
+reusable across many elements, selected with `.`, specificity 0,0,1,0, and one
+element may carry several classes. Use `class` for styling and `id` for a single
+unique hook.
+
+**Q. Difference between `innerHTML` and `textContent`.**
+`innerHTML` reads and writes markup, so `el.innerHTML = '<b>Hi</b>'` renders
+bold text. `textContent` reads and writes plain text and escapes markup, so the
+same string would display the tags literally. `textContent` is faster and safe
+against XSS, so it is the right choice for anything a user typed.
+
+**Q. Difference between `==` and `===`.**
+`==` compares after type coercion, so `5 == "5"` and `0 == false` are both true.
+`===` compares value and type, so both are false. `null == undefined` is true but
+`null === undefined` is false. Always prefer `===`.
+
+**Q. Difference between block and inline elements.**
+A block element starts on a new line, fills the available width and respects
+`width`/`height` and vertical margins: `div`, `p`, `h1`, `ul`, `section`. An
+inline element flows within a line, takes only its content's width and ignores
+`width`/`height`: `span`, `a`, `strong`, `em`. `inline-block` flows inline but
+accepts dimensions.
+
+**Q. Difference between `position: relative` and `position: absolute`.**
+`relative` offsets an element from its normal position while keeping its
+original space in the flow. `absolute` removes it from the flow entirely and
+positions it against the nearest positioned ancestor, so it leaves no gap. The
+dropdown pattern pairs them: `relative` on the parent, `absolute` on the menu.
+
+**Q. Difference between Flexbox and Grid.**
+Flexbox is one-dimensional, laying items out in a single row or column, and is
+content-driven. Grid is two-dimensional, handling rows and columns together, and
+is layout-driven. Use Flexbox for a nav bar or a button row, and Grid for a page
+skeleton.
+
+**Q. Difference between `localStorage` and `sessionStorage`.**
+Both store string key-value pairs per origin, around 5-10MB. `localStorage`
+persists until explicitly cleared; `sessionStorage` is wiped when the tab
+closes. Neither is sent to the server, unlike cookies.
+
+**Q. Difference between client-side and server-side validation.**
+Client-side runs in the browser, gives instant feedback and reduces server load,
+but can be bypassed with DevTools or curl. Server-side runs on the server, is
+slower to respond, but is the only real security boundary. Implement both.
+
+---
+
+### Calculation questions
+
+**Q. An element has `width: 300px; padding: 20px; border: 5px solid; margin: 10px`.
+Give its rendered size under both `box-sizing` values.**
+
+- `content-box`: visible box = 300 + 40 + 10 = **350px**; with margins = 370px.
+- `border-box`: visible box = **300px**; content = 300 − 40 − 10 = 250px;
+  with margins = 320px.
+
+**Q. Two stacked `<p>` elements, the first with `margin-bottom: 30px` and the
+second with `margin-top: 20px`. What is the gap?**
+
+**30px**, not 50px. Adjacent vertical margins collapse to the larger of the two.
+Horizontal margins never collapse.
+
+**Q. What is the specificity of `#nav ul li a:hover`?**
+
+One id, one pseudo-class (counts as a class), three type selectors → **0,1,1,3**.
+
+---
+
+### Short code questions
+
+**Q. Write CSS for a dropdown menu that appears on hover.**
+
+```css
+.dropdown { position: relative; }
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  z-index: 1000;
+}
+
+.dropdown:hover > .dropdown-menu { display: block; }
+```
+
+**Q. Write JS to add a list item to a `<ul>` when a button is clicked, without
+reloading the page.**
+
+```js
+document.getElementById('add').addEventListener('click', function () {
+  const text = document.getElementById('task').value.trim();
+  if (text === '') { return; }                 // reject empty input
+
+  const li = document.createElement('li');
+  li.textContent = text;                       // safe insert
+  document.getElementById('list').appendChild(li);
+
+  document.getElementById('task').value = '';  // clear the field
+});
+```
+
+**Q. Write a fetch request that handles success, failure and completion.**
+
+```js
+fetch('https://jsonplaceholder.typicode.com/users')
+  .then(function (response) {
+    if (!response.ok) {                        // fetch does not reject on 404
+      throw new Error('HTTP ' + response.status);
+    }
+    return response.json();
+  })
+  .then(function (users) { console.log(users.length); })
+  .catch(function (error) { console.error(error.message); })
+  .finally(function () { console.log('Request finished'); });
+```
+
+**Q. Centre a div horizontally and vertically.**
+
+```css
+.parent { display: flex; justify-content: center; align-items: center; }
+/* or with Grid */
+.parent { display: grid; place-items: center; }
+/* a block with a known width, horizontally only */
+.child  { margin: 0 auto; width: 300px; }
+```
+
+**Q. Write a three-column liquid grid layout with named areas.**
+
+```css
+.layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  grid-template-areas:
+    "nav     nav     nav"
+    "col-one col-two col-three"
+    "footer  footer  footer";
+}
+.site-nav { grid-area: nav; }
+.col-one  { grid-area: col-one; }
+```
+
+---
+
+### "Explain and give an example" questions
+
+**Q. What is event delegation? Why is it useful?**
+Attaching one listener to a parent element and using `event.target` inside it to
+work out which child was clicked, instead of attaching a listener to each child.
+It keeps working for children added later, uses less memory, and needs no
+cleanup when children are removed.
+
+```js
+list.addEventListener('click', function (event) {
+  if (event.target.classList.contains('delete')) {
+    event.target.closest('li').remove();
+  }
+});
+```
+
+**Q. What is hoisting? Show a case where it causes a bug.**
+Declarations are moved to the top of their scope during compilation. A function
+*declaration* is hoisted whole and can be called early; a function *expression*
+has only its variable hoisted.
+
+```js
+sayHi();                       // works
+function sayHi() { console.log('hi'); }
+
+sayLater();                    // TypeError: sayLater is not a function
+var sayLater = function () {};
+```
+
+**Q. Why does the browser need `preventDefault()` in a `dragover` handler?**
+Elements reject drops by default. Calling `preventDefault()` cancels that
+rejection and marks the element a valid drop target. Without it the `drop` event
+never fires and the dragged item snaps back.
+
+**Q. What is semantic HTML? Give three benefits.**
+Choosing elements for what the content means rather than how it looks, so
+`<nav>` instead of `<div class="nav">`. Benefits: accessibility, since screen
+readers build an outline from landmarks; SEO, since search engines weight
+semantic content; and maintainability, since the markup documents itself.
+
+**Q. What is AJAX?**
+Asynchronous JavaScript and XML: requesting data from a server and updating part
+of the page without a full reload. Despite the name, modern AJAX normally
+carries JSON, and `fetch` has largely replaced `XMLHttpRequest`.
+
+---
+
+### Timing plan for a 1-hour, 6-question paper
+
+| Phase | Minutes |
+|---|---|
+| Read the whole paper, note mark weights | 3 |
+| Answer the two 4-mark questions first | 20 |
+| Answer the four 3-mark questions | 28 |
+| Re-check the calculation, add any missing examples | 9 |
+
+Start with the calculation question while you are freshest, and **show your
+working line by line**. If the final number is wrong but the method is visible,
+method marks still apply. A bare number with no working earns nothing if it is
+wrong.
 
 ---
 
