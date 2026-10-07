@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IWP Midterm Notes &mdash; Md. Mahir Musleh</title>
+<meta name="description" content="Interactive study notes for Internet and Web Programming, built from twelve coursework assignments.">
+<meta name="author" content="Md. Mahir Musleh">
+<style>
+:root {
+  --navy: #14293f;
+  --navy-2: #1d3b59;
+  --accent: #2f9e6f;
+  --accent-dark: #24805a;
+  --amber: #b7791f;
+  --danger: #b32d20;
+
+  --panel: #ffffff;
+  --line: #e2e8f0;
+  --ink: #1f2933;
+  --ink-soft: #5a6672;
+  --bg: #f4f6f9;
+  --code-bg: #eef2f7;
+  --mark: #fde68a;
+
+  --sidebar: 280px;
+  --speed: 0.2s;
+}
+
+html[data-theme="dark"] {
+  --navy: #e8eef5;
+  --navy-2: #cbd8e6;
+  --accent: #46b588;
+  --accent-dark: #6fd3a8;
+
+  --panel: #16202b;
+  --line: #2a3847;
+  --ink: #e4e9ef;
+  --ink-soft: #9aa7b5;
+  --bg: #0f1720;
+  --code-bg: #1d2935;
+  --mark: #7a5c12;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.7;
+  margin: 0;
+  transition: background var(--speed), color var(--speed);
+}
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  align-items: center;
+  background: var(--navy);
+  display: flex;
+  gap: 14px;
+  padding: 10px 18px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+html[data-theme="dark"] .topbar { background: #0b1118; border-bottom: 1px solid var(--line); }
+
+.brand {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+html[data-theme="dark"] .brand { color: var(--ink); }
+
+.brand small {
+  color: #9fb3c8;
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#search {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  max-width: 340px;
+  padding: 9px 13px;
+  width: 100%;
+  transition: background var(--speed), border-color var(--speed);
+}
+
+#search::placeholder { color: rgba(255,255,255,0.65); }
+
+#search:focus {
+  background: rgba(255,255,255,0.2);
+  border-color: var(--accent);
+  outline: none;
+}
+
+.icon-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 13px;
+  transition: background var(--speed);
+  white-space: nowrap;
+}
+
+.icon-btn:hover { background: rgba(255,255,255,0.26); }
+
+a.icon-btn { text-decoration: none; }
+
+#menu-btn { display: none; }
+
+/* ---------- layout ---------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  margin: 0 auto;
+  max-width: 1500px;
+}
+
+/* ---------- sidebar ---------- */
+
+.sidebar {
+  align-self: start;
+  border-right: 1px solid var(--line);
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
+  padding: 22px 14px 40px;
+  position: sticky;
+  top: 56px;
+}
+
+.side-title {
+  color: var(--ink-soft);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  margin: 0 0 10px 10px;
+  text-transform: uppercase;
+}
+
+.sidebar ol { list-style: none; margin: 0; padding: 0; }
+
+.sidebar a {
+  align-items: baseline;
+  border-radius: 7px;
+  color: var(--ink-soft);
+  display: flex;
+  font-size: 14px;
+  gap: 9px;
+  padding: 7px 10px;
+  text-decoration: none;
+  transition: background var(--speed), color var(--speed);
+}
+
+.sidebar a:hover { background: var(--code-bg); color: var(--ink); }
+
+.sidebar a.active {
+  background: var(--code-bg);
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+.nav-num {
+  color: var(--accent);
+  flex: 0 0 18px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.progress-wrap { margin: 0 10px 16px; }
+
+.progress-bar {
+  background: var(--line);
+  border-radius: 999px;
+  height: 5px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  background: var(--accent);
+  height: 100%;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.progress-label {
+  color: var(--ink-soft);
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+/* ---------- content ---------- */
+
+.content { min-width: 0; padding: 26px 36px 80px; }
+
+.page-title {
+  color: var(--navy);
+  font-size: 32px;
+  margin: 0 0 6px;
+}
+
+.subtitle {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin: 0 0 22px;
+}
+
+.section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 18px;
+  padding: 4px 26px 6px;
+}
+
+.section-head {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.collapse-btn {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--navy);
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 auto;
+  font-family: inherit;
+  font-size: 21px;
+  font-weight: 700;
+  gap: 10px;
+  padding: 16px 0;
+  text-align: left;
+}
+
+.chev { color: var(--accent); font-size: 14px; transition: transform var(--speed); }
+.collapse-btn[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+
+.sec-num {
+  background: var(--accent);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  min-width: 26px;
+  padding: 1px 7px;
+  text-align: center;
+}
+
+.anchor {
+  color: var(--line);
+  font-size: 18px;
+  text-decoration: none;
+}
+.anchor:hover { color: var(--accent); }
+
+.section-body { padding-bottom: 14px; }
+.section-body[hidden] { display: none; }
+
+.content h3 {
+  border-bottom: 2px solid var(--accent);
+  color: var(--navy);
+  display: inline-block;
+  font-size: 15px;
+  letter-spacing: 0.8px;
+  margin: 22px 0 10px;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.content p { margin: 0 0 12px; }
+.content ul, .content ol { margin: 0 0 14px; padding-left: 22px; }
+.content li { margin-bottom: 5px; }
+.content strong { color: var(--navy); }
+
+.content blockquote {
+  background: var(--code-bg);
+  border-left: 4px solid var(--amber);
+  border-radius: 0 8px 8px 0;
+  margin: 14px 0;
+  padding: 12px 16px;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+
+code {
+  background: var(--code-bg);
+  border-radius: 4px;
+  font-family: "Cascadia Code", Consolas, Monaco, monospace;
+  font-size: 13px;
+  padding: 2px 5px;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  margin: 0 0 14px;
+  overflow-x: auto;
+  padding: 14px 16px;
+  position: relative;
+}
+
+pre code { background: none; font-size: 13px; line-height: 1.6; padding: 0; }
+
+.copy-btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  opacity: 0;
+  padding: 3px 9px;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  transition: opacity var(--speed);
+}
+
+pre:hover .copy-btn, .copy-btn:focus { opacity: 1; }
+.copy-btn.done { border-color: var(--accent); color: var(--accent-dark); }
+
+/* tables */
+
+.content table {
+  border-collapse: collapse;
+  display: block;
+  margin: 0 0 16px;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.content th {
+  background: var(--navy);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  padding: 9px 13px;
+  text-align: left;
+}
+
+html[data-theme="dark"] .content th { background: #223040; color: var(--ink); }
+
+.content td {
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  padding: 8px 13px;
+  vertical-align: top;
+}
+
+.content tbody tr:nth-child(even) { background: var(--code-bg); }
+
+/* search */
+
+mark { background: var(--mark); border-radius: 3px; color: inherit; padding: 0 2px; }
+
+.section.hidden { display: none; }
+
+#no-results {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink-soft);
+  display: none;
+  padding: 30px;
+  text-align: center;
+}
+
+#search-note {
+  color: var(--ink-soft);
+  display: none;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+/* ---------- quiz ---------- */
+
+.quiz-overlay {
+  background: rgba(10, 18, 26, 0.72);
+  display: none;
+  inset: 0;
+  padding: 20px;
+  position: fixed;
+  z-index: 100;
+}
+
+.quiz-overlay.open { align-items: center; display: flex; justify-content: center; }
+
+.quiz-card {
+  background: var(--panel);
+  border-radius: 14px;
+  max-width: 620px;
+  padding: 26px 28px;
+  width: 100%;
+}
+
+.quiz-top {
+  align-items: center;
+  color: var(--ink-soft);
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.quiz-topic { color: var(--accent-dark); font-weight: 700; }
+
+.quiz-q {
+  color: var(--navy);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.quiz-a {
+  background: var(--code-bg);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 18px;
+  padding: 13px 16px;
+}
+
+.quiz-a[hidden] { display: none; }
+
+.quiz-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  transition: background var(--speed);
+}
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); }
+
+.btn-quiet {
+  background: var(--code-bg);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-quiet:hover { background: var(--line); }
+
+.btn-ghost { background: none; color: var(--ink-soft); margin-left: auto; }
+
+/* ---------- print ---------- */
+
+@media print {
+  .topbar, .sidebar, .quiz-overlay, .copy-btn, .anchor, #search-note { display: none !important; }
+  .shell { display: block; }
+  .content { padding: 0; }
+  .section { border: none; break-inside: avoid; margin-bottom: 10px; padding: 0; }
+  .section-body[hidden] { display: block !important; }
+  .chev { display: none; }
+  body { background: #fff; }
+  pre, .content table { break-inside: avoid; }
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1000px) {
+  .shell { grid-template-columns: 1fr; }
+
+  #menu-btn { display: block; }
+
+  .sidebar {
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    bottom: 0;
+    left: 0;
+    max-height: none;
+    position: fixed;
+    top: 56px;
+    transform: translateX(-100%);
+    transition: transform var(--speed);
+    width: var(--sidebar);
+    z-index: 40;
+  }
+
+  .sidebar.open { transform: none; }
+
+  .content { padding: 20px 18px 70px; }
+  .page-title { font-size: 25px; }
+}
+
+@media (max-width: 620px) {
+  .brand small { display: none; }
+  .section { padding: 2px 15px 4px; }
+  .collapse-btn { font-size: 17px; }
+  .quiz-card { padding: 20px 18px; }
+  #quiz-btn span.full { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button type="button" class="icon-btn" id="menu-btn" aria-label="Toggle contents">&#9776;</button>
+  <div class="brand">IWP Midterm Notes<small>Md. Mahir Musleh &middot; IIT, DU</small></div>
+  <input type="search" id="search" placeholder="Search notes&hellip;  (press /)" autocomplete="off" aria-label="Search notes">
+  <button type="button" class="icon-btn" id="quiz-btn">&#9733; <span class="full">Quiz</span></button>
+  <button type="button" class="icon-btn" id="expand-btn" title="Expand or collapse all">&#8597;</button>
+  <a class="icon-btn" href="IWP-Midterm-Notes.pdf" download title="Download the PDF">&#8681; <span class="full">PDF</span></a>
+  <button type="button" class="icon-btn" id="theme-btn" title="Toggle theme">&#9680;</button>
+</header>
+
+<div class="shell">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div id="progress-fill"></div></div>
+      <div class="progress-label"><span id="progress-pct">0</span>% read</div>
+    </div>
+    <p class="side-title">Contents</p>
+    <ol>
+        <li><a href="#1-html-foundations-semantic-markup" data-nav="1-html-foundations-semantic-markup"><span class="nav-num">1</span>HTML foundations & semantic markup</a></li>
+        <li><a href="#2-forms-input-validation" data-nav="2-forms-input-validation"><span class="nav-num">2</span>Forms & input validation</a></li>
+        <li><a href="#3-css-fundamentals-selectors" data-nav="3-css-fundamentals-selectors"><span class="nav-num">3</span>CSS fundamentals & selectors</a></li>
+        <li><a href="#4-the-box-model" data-nav="4-the-box-model"><span class="nav-num">4</span>The box model</a></li>
+        <li><a href="#5-flexbox" data-nav="5-flexbox"><span class="nav-num">5</span>Flexbox</a></li>
+        <li><a href="#6-positioning-dropdown-menus" data-nav="6-positioning-dropdown-menus"><span class="nav-num">6</span>Positioning & dropdown menus</a></li>
+        <li><a href="#7-css-grid" data-nav="7-css-grid"><span class="nav-num">7</span>CSS Grid</a></li>
+        <li><a href="#8-javascript-basics-functions" data-nav="8-javascript-basics-functions"><span class="nav-num">8</span>JavaScript basics & functions</a></li>
+        <li><a href="#9-dom-manipulation" data-nav="9-dom-manipulation"><span class="nav-num">9</span>DOM manipulation</a></li>
+        <li><a href="#10-events-event-delegation" data-nav="10-events-event-delegation"><span class="nav-num">10</span>Events & event delegation</a></li>
+        <li><a href="#11-drag-and-drop" data-nav="11-drag-and-drop"><span class="nav-num">11</span>Drag and drop</a></li>
+        <li><a href="#12-objects-classes" data-nav="12-objects-classes"><span class="nav-num">12</span>Objects & classes</a></li>
+        <li><a href="#13-asynchronous-js-fetch-promises" data-nav="13-asynchronous-js-fetch-promises"><span class="nav-num">13</span>Asynchronous JS: fetch & Promises</a></li>
+        <li><a href="#14-quick-reference-tables" data-nav="14-quick-reference-tables"><span class="nav-num">14</span>Quick-reference tables</a></li>
+        <li><a href="#15-exam-strategy" data-nav="15-exam-strategy"><span class="nav-num">15</span>Exam strategy</a></li>
+    </ol>
+  </nav>
+
+  <main class="content">
+    <h1 class="page-title">Internet &amp; Web Programming</h1>
+    <p class="subtitle">Midterm study notes, built from Assignments 01&ndash;12.</p>
+
+    <div id="intro"><p><strong>Md. Mahir Musleh — Institute of Information Technology, University of Dhaka</strong></p>
+<p>Built from Assignments 01–12. Each section states the theory, then points at the
+assignment where you already wrote it, then lists likely exam questions.</p>
+</div>
+
+    <p id="search-note"></p>
+
+    <div id="sections">
+
+      <section class="section" id="1-html-foundations-semantic-markup" data-title="HTML foundations & semantic markup">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-1-html-foundations-semantic-markup">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">1</span>
+            <span class="sec-title">HTML foundations & semantic markup</span>
+          </button>
+          <a class="anchor" href="#1-html-foundations-semantic-markup" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-1-html-foundations-semantic-markup">
+<h3>Theory</h3>
+<p><strong>Semantic HTML</strong> means choosing elements for what the content <em>means</em>, not how
+it looks. <code>&lt;header&gt;</code> is not "a bar at the top", it is "introductory content".</p>
+<p>Why it matters (three standard exam answers):
+1. <strong>Accessibility</strong> — screen readers build a navigable outline from landmarks.
+2. <strong>SEO</strong> — search engines weight <code>&lt;h1&gt;</code> and <code>&lt;article&gt;</code> content.
+3. <strong>Maintainability</strong> — <code>&lt;nav&gt;</code> tells the next developer more than <code>&lt;div class="nav"&gt;</code>.</p>
+<p><strong>Document structure</strong></p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;          &lt;!-- triggers standards mode, NOT quirks mode --&gt;
+&lt;html lang=&quot;en&quot;&gt;         &lt;!-- lang aids screen readers and translation --&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;                               &lt;!-- must be first 1024 bytes --&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;title&gt;...&lt;/title&gt;                                   &lt;!-- required --&gt;
+&lt;/head&gt;
+&lt;body&gt; ... &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>Block vs inline</strong></p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Inline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Starts on a new line</td>
+<td>Flows within a line</td>
+</tr>
+<tr>
+<td>Takes full available width</td>
+<td>Takes only content width</td>
+</tr>
+<tr>
+<td>width/height apply</td>
+<td>width/height ignored</td>
+</tr>
+<tr>
+<td><code>div p h1-h6 ul ol li table section</code></td>
+<td><code>span a strong em img code</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>inline-block</code> = flows inline, but accepts width/height/vertical margins.</p>
+<p><strong>Key semantic elements</strong></p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;header&gt;</code></td>
+<td>Introductory content for page or section</td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>Major navigation block</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>Dominant content — <strong>only one per page</strong>, not nested in header/nav/footer</td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>Self-contained, independently distributable</td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>Thematic grouping, normally with a heading</td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>Tangentially related (sidebar)</td>
+</tr>
+<tr>
+<td><code>&lt;footer&gt;</code></td>
+<td>Closing info for page or section</td>
+</tr>
+<tr>
+<td><code>&lt;figure&gt;</code>/<code>&lt;figcaption&gt;</code></td>
+<td>Image with caption</td>
+</tr>
+<tr>
+<td><code>&lt;time datetime="2026-10-07"&gt;</code></td>
+<td>Machine-readable date</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>&lt;article&gt;</code> vs <code>&lt;section&gt;</code>:</strong> if the content would still make sense pulled out
+and published on its own (a blog post, a product card), use <code>&lt;article&gt;</code>.
+Otherwise <code>&lt;section&gt;</code>.</p>
+<p><strong>Tables</strong> — only for tabular data, never layout.</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Academic record&lt;/caption&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;Exam&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;EMIT&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+<p><code>scope="col"</code> / <code>scope="row"</code> tells a screen reader which header governs which cell.</p>
+<p><strong>Lists:</strong> <code>&lt;ul&gt;</code> unordered, <code>&lt;ol&gt;</code> ordered, <code>&lt;dl&gt;</code>/<code>&lt;dt&gt;</code>/<code>&lt;dd&gt;</code> for term–definition pairs.</p>
+<h3>In your work</h3>
+<p><strong>Assignment 01</strong> (CV) used <code>article, header, section, main, footer, address,
+time, dl/dt/dd, table/thead/tbody/caption</code>.
+<strong>Assignment 12</strong> used <code>&lt;caption&gt;</code> and <code>scope="col"</code> in the student table.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Define semantic HTML and give three benefits.</em> Choosing elements for what content means, not how it looks. Benefits: accessibility, SEO, maintainability.</li>
+<li><em>Difference between <code>&lt;section&gt;</code> and <code>&lt;div&gt;</code>?</em> <code>&lt;section&gt;</code> carries meaning and
+  belongs in the outline; <code>&lt;div&gt;</code> is a styling hook with no meaning.</li>
+<li><em>Why <code>&lt;!DOCTYPE html&gt;</code>?</em> Standards mode; without it browsers use quirks mode
+  and the box model behaves differently.</li>
+<li><em>Block vs inline with examples.</em> Block starts on a new line and fills the width, and respects width/height: div, p, h1, ul, section. Inline flows within a line and ignores width/height: span, a, strong, em.</li>
+<li><em>Write the skeleton of a valid HTML5 page.</em> <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html lang&gt;</code>, <code>&lt;head&gt;</code> with charset + viewport + title, then <code>&lt;body&gt;</code>.</li>
+<li><em>What does <code>alt</code> do?</em> Text alternative for screen readers and for when the
+  image fails to load. Decorative images take <code>alt=""</code>.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="2-forms-input-validation" data-title="Forms & input validation">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-2-forms-input-validation">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">2</span>
+            <span class="sec-title">Forms & input validation</span>
+          </button>
+          <a class="anchor" href="#2-forms-input-validation" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-2-forms-input-validation">
+<h3>Theory</h3>
+<pre><code class="language-html">&lt;form action=&quot;/submit&quot; method=&quot;post&quot;&gt;
+</code></pre>
+<p><strong>GET vs POST</strong> — classic exam question:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GET</th>
+<th>POST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data location</td>
+<td>URL query string</td>
+<td>Request body</td>
+</tr>
+<tr>
+<td>Visible in address bar</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Length limit</td>
+<td>~2048 chars</td>
+<td>Effectively none</td>
+</tr>
+<tr>
+<td>Bookmarkable / cached</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Use for</td>
+<td>Searches, filters (idempotent)</td>
+<td>Logins, uploads, anything that changes state</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Labels</strong> — every control needs one:</p>
+<pre><code class="language-html">&lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;
+&lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot;&gt;
+</code></pre>
+<p><code>for</code> must match the input's <code>id</code>. Clicking the label focuses the input, and
+screen readers announce it. <strong><code>name</code> is what gets submitted; <code>id</code> is for
+<code>for</code>/CSS/JS.</strong> Without <code>name</code>, the field is not sent.</p>
+<p><strong>Input types:</strong> <code>text password email number date checkbox radio submit reset
+file tel url range color hidden</code></p>
+<p>Radio buttons sharing one <code>name</code> become mutually exclusive — that is <em>why</em> the
+shared name matters.</p>
+<p><strong>HTML5 validation attributes:</strong> <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>min</code>,
+<code>max</code>, <code>step</code>, <code>pattern</code>, <code>placeholder</code>, <code>readonly</code>, <code>disabled</code>, <code>autocomplete</code></p>
+<p><code>placeholder</code> is a <strong>hint, not a label</strong> — it disappears on typing.</p>
+<p><strong>Grouping:</strong> <code>&lt;fieldset&gt;</code> + <code>&lt;legend&gt;</code> (e.g. a group of radio buttons).
+<strong><code>&lt;select&gt;</code></strong> with <code>&lt;option&gt;</code>; <code>&lt;datalist&gt;</code> gives a free-text field with suggestions.</p>
+<p><strong>Client vs server validation:</strong> client-side is for user convenience and can be
+bypassed (DevTools, curl). Server-side is the real security boundary. <strong>Always
+do both.</strong></p>
+<h3>In your work</h3>
+<p><strong>Assignment 02</strong> used text, password, email, number, date, checkbox, radio,
+submit, reset, plus <code>required/minlength/maxlength/min/max/pattern/title</code>.
+<strong>A08/A09/A10/A11</strong> added JS validation on top (<code>trim()</code>, empty checks, duplicates).</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>GET vs POST.</em> GET puts data in the URL, is limited in length, bookmarkable and cacheable, for reads. POST puts data in the request body, has no practical limit, is not cached, for anything that changes state.</li>
+<li><em>Purpose of <code>&lt;label for&gt;</code>?</em> Accessibility + enlarged click target.</li>
+<li><em>Difference between <code>name</code> and <code>id</code>?</em> <code>name</code> submits, <code>id</code> identifies.</li>
+<li><em>Why do radio buttons need the same <code>name</code>?</em> It makes them one group so only
+  one can be chosen.</li>
+<li><em>List five input types with purposes.</em> text (free text), email (format check), number (numeric with min/max), date (date picker), radio (one choice from a group), checkbox (independent on/off).</li>
+<li><em>Is client-side validation enough?</em> No — explain bypass + server-side.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="3-css-fundamentals-selectors" data-title="CSS fundamentals & selectors">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-3-css-fundamentals-selectors">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">3</span>
+            <span class="sec-title">CSS fundamentals & selectors</span>
+          </button>
+          <a class="anchor" href="#3-css-fundamentals-selectors" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-3-css-fundamentals-selectors">
+<h3>Theory</h3>
+<p><strong>Three ways to apply CSS</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Syntax</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inline</td>
+<td><code>&lt;p style="..."&gt;</code></td>
+<td>Highest specificity, unmaintainable, avoid</td>
+</tr>
+<tr>
+<td>Internal</td>
+<td><code>&lt;style&gt;</code> in <code>&lt;head&gt;</code></td>
+<td>Single page only</td>
+</tr>
+<tr>
+<td>External</td>
+<td><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></td>
+<td><strong>Preferred</strong> — caching, reuse, separation of concerns</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Selectors</strong></p>
+<pre><code class="language-css">*              /* universal */
+p              /* type */
+.card          /* class — reusable */
+#header        /* id — unique per page */
+[type=&quot;text&quot;]  /* attribute */
+</code></pre>
+<p><strong>Combinators</strong> (common exam question):</p>
+<table>
+<thead>
+<tr>
+<th>Combinator</th>
+<th>Syntax</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Descendant</td>
+<td><code>A B</code></td>
+<td>B anywhere inside A</td>
+</tr>
+<tr>
+<td>Child</td>
+<td><code>A &gt; B</code></td>
+<td>B is a <strong>direct</strong> child of A</td>
+</tr>
+<tr>
+<td>Adjacent sibling</td>
+<td><code>A + B</code></td>
+<td>B immediately follows A, same parent</td>
+</tr>
+<tr>
+<td>General sibling</td>
+<td><code>A ~ B</code></td>
+<td>Any B after A, same parent</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pseudo-classes</strong> (a <em>state</em>): <code>:hover :focus :active :visited :first-child
+:last-child :nth-child(n) :not() :checked :disabled :focus-within</code></p>
+<p><strong>Pseudo-elements</strong> (a <em>part</em>, written with <code>::</code>): <code>::before ::after
+::first-line ::first-letter</code></p>
+<p><code>::before</code>/<code>::after</code> require a <code>content</code> property or they do not render.</p>
+<p><strong>Specificity</strong> — calculate as (inline, id, class, type):</p>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>0,0,0,1</td>
+</tr>
+<tr>
+<td><code>.card</code></td>
+<td>0,0,1,0</td>
+</tr>
+<tr>
+<td><code>#nav</code></td>
+<td>0,1,0,0</td>
+</tr>
+<tr>
+<td><code>#nav .item a</code></td>
+<td>0,1,1,1</td>
+</tr>
+<tr>
+<td><code>style="..."</code></td>
+<td>1,0,0,0</td>
+</tr>
+<tr>
+<td><code>!important</code></td>
+<td>overrides everything (avoid)</td>
+</tr>
+</tbody>
+</table>
+<p>Equal specificity → <strong>last rule wins</strong> (that's the "cascade").</p>
+<p><strong>Inheritance:</strong> text properties inherit (<code>color</code>, <code>font-family</code>, <code>line-height</code>);
+box properties do not (<code>margin</code>, <code>padding</code>, <code>border</code>, <code>width</code>).</p>
+<p><strong>Units</strong></p>
+<table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>Relative to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>px</code></td>
+<td>Absolute</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>Parent</td>
+</tr>
+<tr>
+<td><code>em</code></td>
+<td><strong>Parent's</strong> font size (compounds when nested)</td>
+</tr>
+<tr>
+<td><code>rem</code></td>
+<td><strong>Root</strong> font size (no compounding — safer)</td>
+</tr>
+<tr>
+<td><code>vw</code>/<code>vh</code></td>
+<td>1% of viewport width/height</td>
+</tr>
+<tr>
+<td><code>fr</code></td>
+<td>Fraction of free space (Grid only)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>CSS variables</strong></p>
+<pre><code class="language-css">:root { --navy: #14293f; }
+.header { color: var(--navy); }
+</code></pre>
+<p>Defined on <code>:root</code> so they are globally available; change once, applies everywhere.</p>
+<h3>In your work</h3>
+<p>Every assignment from 03 onwards uses an external stylesheet and <code>:root</code>
+variables. A05 demonstrates all four combinators explicitly.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Three ways to include CSS; which is best and why?</em> Inline, internal <code>&lt;style&gt;</code>, external <code>&lt;link&gt;</code>. External is best: cached across pages, reusable, keeps structure separate from presentation.</li>
+<li><em>Explain the four combinators with examples.</em> <code>A B</code> descendant (any depth), <code>A &gt; B</code> direct child, <code>A + B</code> immediately next sibling, <code>A ~ B</code> any later sibling.</li>
+<li><em>Calculate specificity of <code>#nav ul li a:hover</code>.</em> → 0,1,1,3 (<code>:hover</code> counts as a class)</li>
+<li><em>Pseudo-class vs pseudo-element.</em> A pseudo-class targets a state (<code>:hover</code>, <code>:first-child</code>), single colon. A pseudo-element targets a part of the element (<code>::before</code>, <code>::first-line</code>), double colon.</li>
+<li><em><code>em</code> vs <code>rem</code>.</em> <code>em</code> is relative to the parent's font size and compounds when nested; <code>rem</code> is relative to the root font size and does not compound.</li>
+<li><em>What does "cascading" mean?</em> Rules combine by origin, specificity, then source order.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="4-the-box-model" data-title="The box model">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-4-the-box-model">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">4</span>
+            <span class="sec-title">The box model</span>
+          </button>
+          <a class="anchor" href="#4-the-box-model" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-4-the-box-model">
+<h3>Theory</h3>
+<p>Every element is a rectangle of four layers, inside out:</p>
+<pre><code>┌─────────── margin (transparent, outside) ──────────┐
+│ ┌───────── border ─────────────────────────────┐   │
+│ │ ┌─────── padding (inside, takes bg) ──────┐  │   │
+│ │ │            content (width × height)      │  │   │
+│ │ └─────────────────────────────────────────┘  │   │
+│ └──────────────────────────────────────────────┘   │
+└────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong><code>box-sizing</code> — the single most examinable idea here</strong></p>
+<pre><code class="language-css">/* content-box (default) */
+width: 300px; padding: 20px; border: 5px solid;
+/* rendered width = 300 + 20+20 + 5+5 = 350px  ← surprising */
+
+/* border-box */
+* { box-sizing: border-box; }
+width: 300px; padding: 20px; border: 5px solid;
+/* rendered width = 300px exactly; content shrinks to 250px */
+</code></pre>
+<p>Be ready to <strong>compute a rendered width both ways</strong>. Margin is <em>never</em> included
+in either calculation.</p>
+<p><strong>Shorthand order</strong> is clockwise from top:</p>
+<pre><code class="language-css">margin: 10px;                  /* all four */
+margin: 10px 20px;             /* vertical | horizontal */
+margin: 10px 20px 30px;        /* top | horizontal | bottom */
+margin: 10px 20px 30px 40px;   /* top right bottom left (TRouBLe) */
+</code></pre>
+<p><strong>Margin collapsing</strong> — adjacent <em>vertical</em> margins merge into the larger of the
+two; 30px below + 20px above = <strong>30px gap, not 50px</strong>. Horizontal margins never
+collapse. <code>margin: 0 auto</code> horizontally centres a block that has a set width.</p>
+<p><strong><code>overflow</code>:</strong> <code>visible</code> (default) | <code>hidden</code> | <code>scroll</code> | <code>auto</code></p>
+<p><strong><code>display</code>:</strong> <code>block | inline | inline-block | none | flex | grid</code>
+<code>display: none</code> removes from layout entirely; <code>visibility: hidden</code> keeps the space.</p>
+<h3>In your work</h3>
+<p><strong>Assignment 04</strong> was built entirely on this: global <code>border-box</code>, a
+margin/padding experiment, and <code>overflow-x: hidden</code>.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Draw and label the box model.</em> Content in the middle, then padding, then border, then margin on the outside.</li>
+<li><em>An element has <code>width:200px; padding:10px; border:2px</code>. Total width under each <code>box-sizing</code>?</em>
+  → content-box: 200+20+4 = <strong>224px</strong>; border-box: <strong>200px</strong></li>
+<li><em>Why set <code>box-sizing: border-box</code> globally?</em> Declared width = rendered width,
+  so layout maths stays predictable.</li>
+<li><em>What is margin collapsing?</em> Adjacent vertical margins merge into the larger of the two rather than adding. 30px below plus 20px above gives a 30px gap. Horizontal margins never collapse.</li>
+<li><em><code>display:none</code> vs <code>visibility:hidden</code>.</em> <code>display:none</code> removes the element from layout entirely; <code>visibility:hidden</code> hides it but keeps its space reserved.</li>
+<li><em>How do you centre a block horizontally?</em> <code>margin: 0 auto</code> with a width.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="5-flexbox" data-title="Flexbox">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-5-flexbox">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">5</span>
+            <span class="sec-title">Flexbox</span>
+          </button>
+          <a class="anchor" href="#5-flexbox" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-5-flexbox">
+<h3>Theory</h3>
+<p><strong>One-dimensional</strong> layout — a row <em>or</em> a column. (Grid is two-dimensional.)</p>
+<p><strong>Axes:</strong> <code>flex-direction</code> sets the <strong>main axis</strong>; the <strong>cross axis</strong> is
+perpendicular. With <code>row</code>, main = horizontal. With <code>column</code>, main = vertical —
+so <code>justify-content</code> then controls <em>vertical</em> placement. Examiners love this.</p>
+<p><strong>Container properties</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display</code></td>
+<td><code>flex</code> | <code>inline-flex</code></td>
+</tr>
+<tr>
+<td><code>flex-direction</code></td>
+<td><code>row</code> | <code>row-reverse</code> | <code>column</code> | <code>column-reverse</code></td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td><code>nowrap</code> | <code>wrap</code> | <code>wrap-reverse</code></td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td><code>flex-start</code> | <code>flex-end</code> | <code>center</code> | <code>space-between</code> | <code>space-around</code> | <code>space-evenly</code></td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td><code>stretch</code> | <code>flex-start</code> | <code>flex-end</code> | <code>center</code> | <code>baseline</code></td>
+</tr>
+<tr>
+<td><code>align-content</code></td>
+<td>aligns <strong>multiple lines</strong> (needs wrapping)</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>spacing between items</td>
+</tr>
+</tbody>
+</table>
+<p><code>justify-content</code> = <strong>main</strong> axis. <code>align-items</code> = <strong>cross</strong> axis.</p>
+<p><strong>Item properties</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flex-grow</code></td>
+<td>Share of extra space (default 0)</td>
+</tr>
+<tr>
+<td><code>flex-shrink</code></td>
+<td>How it shrinks (default 1)</td>
+</tr>
+<tr>
+<td><code>flex-basis</code></td>
+<td>Starting size before grow/shrink</td>
+</tr>
+<tr>
+<td><code>flex: 1 1 200px</code></td>
+<td>shorthand grow/shrink/basis</td>
+</tr>
+<tr>
+<td><code>align-self</code></td>
+<td>Override <code>align-items</code> for one item</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>Visual reorder (does not change DOM/tab order)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Perfect centring:</strong></p>
+<pre><code class="language-css">.box { display: flex; justify-content: center; align-items: center; }
+</code></pre>
+<h3>In your work</h3>
+<p><strong>A05</strong> nav bar (<code>display:flex</code>, <code>flex-wrap</code>, nested flex containers).
+<strong>A08–A12</strong> use flex for form rows, card metadata and button groups.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Flexbox vs Grid — when to use each?</em> Flex = 1D, content-driven, good for a nav
+  bar or button row. Grid = 2D, layout-driven, good for a page skeleton.</li>
+<li><em><code>justify-content</code> vs <code>align-items</code>.</em> <code>justify-content</code> positions items along the main axis; <code>align-items</code> positions them along the cross axis.</li>
+<li><em>What does <code>flex: 1</code> mean?</em> <code>flex-grow:1; flex-shrink:1; flex-basis:0</code> — equal share.</li>
+<li><em>Centre a div both ways using flexbox.</em> <code>display:flex; justify-content:center; align-items:center</code> on the parent.</li>
+<li><em>What changes if <code>flex-direction: column</code>?</em> The axes swap.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="6-positioning-dropdown-menus" data-title="Positioning & dropdown menus">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-6-positioning-dropdown-menus">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">6</span>
+            <span class="sec-title">Positioning & dropdown menus</span>
+          </button>
+          <a class="anchor" href="#6-positioning-dropdown-menus" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-6-positioning-dropdown-menus">
+<h3>Theory</h3>
+<table>
+<thead>
+<tr>
+<th><code>position</code></th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>Default. <code>top/left</code> ignored</td>
+</tr>
+<tr>
+<td><code>relative</code></td>
+<td>Offset <strong>from its normal spot</strong>; original space preserved</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>Removed from flow; positioned against <strong>nearest positioned ancestor</strong></td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>Removed from flow; positioned against the <strong>viewport</strong> (stays on scroll)</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td>Relative until a scroll threshold, then fixed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The dropdown pattern</strong> — the core of Assignment 06:</p>
+<pre><code class="language-css">.dropdown          { position: relative; }   /* ① containing block */
+.dropdown-menu     { position: absolute;     /* ② out of flow */
+                     top: 100%; left: 0;     /* ③ directly below parent */
+                     display: none;          /* ④ hidden */
+                     z-index: 1000; }        /* ⑤ above page content */
+.dropdown:hover &gt; .dropdown-menu { display: block; }   /* ⑥ reveal */
+</code></pre>
+<p>Why each line matters:
+- <code>relative</code> on the parent makes it the reference for the absolute child. Without
+  it, the menu positions against the whole page.
+- <code>absolute</code> takes the panel out of flow, so opening it <strong>does not push the other
+  nav items sideways</strong>.
+- <code>top: 100%</code> = "100% of the parent's height down" = immediately below it.
+- <code>z-index</code> needs a <em>positioned</em> element to work at all.</p>
+<p><strong>Second level</strong> opens sideways with <code>left: 100%</code> instead of <code>top: 100%</code>.</p>
+<p><strong>Stacking context:</strong> <code>z-index</code> only applies to positioned elements. A new
+stacking context is created by <code>position</code> + <code>z-index</code>, and also by <code>opacity &lt; 1</code>,
+<code>transform</code>, <code>filter</code>. A child can never escape its parent's stacking context —
+a common source of "my z-index: 9999 doesn't work".</p>
+<h3>In your work</h3>
+<p><strong>Assignment 06</strong> — two-level CSS-only dropdown, 15 pages, no JavaScript.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Compare the five <code>position</code> values.</em> static (default, offsets ignored), relative (offset from normal spot, space kept), absolute (out of flow, against nearest positioned ancestor), fixed (out of flow, against the viewport), sticky (relative until a scroll threshold, then fixed).</li>
+<li><em>Why does the dropdown parent need <code>position: relative</code>?</em> It makes the parent the containing block, so the absolutely positioned menu is placed against it instead of against the page.</li>
+<li><em>Write CSS for a hover dropdown.</em> Parent <code>position:relative</code>; menu <code>position:absolute; top:100%; display:none; z-index:1000</code>; then <code>.dropdown:hover &gt; .dropdown-menu { display:block; }</code>.</li>
+<li><em>What is <code>z-index</code> and when does it not work?</em> Only on positioned elements;
+  also constrained by stacking contexts.</li>
+<li><em>How do you make a submenu open to the right?</em> <code>left: 100%; top: 0</code>.</li>
+<li><em><code>absolute</code> vs <code>fixed</code>.</em> Both leave the normal flow. Absolute positions against the nearest positioned ancestor and scrolls with the page; fixed positions against the viewport and stays put when scrolling.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="7-css-grid" data-title="CSS Grid">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-7-css-grid">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">7</span>
+            <span class="sec-title">CSS Grid</span>
+          </button>
+          <a class="anchor" href="#7-css-grid" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-7-css-grid">
+<h3>Theory</h3>
+<p><strong>Two-dimensional</strong> — rows and columns together.</p>
+<pre><code class="language-css">.layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) minmax(240px, 300px);
+  gap: 22px;
+  grid-template-areas:
+    &quot;nav     nav     nav       nav&quot;
+    &quot;feature feature feature   sidebar&quot;
+    &quot;col-one col-two col-three sidebar&quot;
+    &quot;footer  footer  footer    footer&quot;;
+}
+.site-nav { grid-area: nav; }
+.sidebar  { grid-area: sidebar; }
+</code></pre>
+<p><strong>Sizing functions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1fr</code></td>
+<td>One share of leftover space</td>
+</tr>
+<tr>
+<td><code>repeat(3, 1fr)</code></td>
+<td>Three equal columns</td>
+</tr>
+<tr>
+<td><code>minmax(240px, 300px)</code></td>
+<td>Never below 240, never above 300</td>
+</tr>
+<tr>
+<td><code>auto-fit</code> / <code>auto-fill</code></td>
+<td>Fit as many tracks as will fit</td>
+</tr>
+<tr>
+<td><code>repeat(auto-fit, minmax(200px, 1fr))</code></td>
+<td>The classic responsive grid, no media query</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Placement</strong>: by <strong>named area</strong> (readable, self-documenting) or by <strong>line
+number</strong> (<code>grid-column: 1 / 3</code>, meaning from line 1 to line 3 = spanning 2
+columns). Note lines are 1-indexed and you count <em>lines</em>, not columns.</p>
+<p><strong>Advantage of named areas:</strong> a media query only has to redraw the area map —
+no element needs new positioning rules.</p>
+<pre><code class="language-css">@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: &quot;nav nav&quot; &quot;feature feature&quot; &quot;col-one col-two&quot; &quot;footer footer&quot;;
+  }
+}
+</code></pre>
+<p><strong>Alignment:</strong> <code>justify-items</code>/<code>align-items</code> (items in their cell),
+<code>justify-content</code>/<code>align-content</code> (the whole grid in the container).
+<code>place-items: center</code> is shorthand for both.</p>
+<p><strong>Liquid vs fixed layout:</strong> liquid uses <code>fr</code>/<code>%</code>/<code>minmax</code> so it fills any
+viewport; fixed uses <code>px</code> and leaves gaps or overflows.</p>
+<h3>In your work</h3>
+<p><strong>Assignment 07</strong> — liquid layout with named areas, redrawn at 900px and 600px.
+<strong>Assignment 11</strong> — three kanban lanes with <code>repeat(3, 1fr)</code>.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Grid vs Flexbox.</em> Grid is two-dimensional, for rows and columns together, layout-driven. Flexbox is one-dimensional, a single row or column, content-driven.</li>
+<li><em>What is <code>fr</code>?</em> A fraction of the <strong>remaining</strong> free space after fixed tracks.</li>
+<li><em>Explain <code>grid-template-areas</code> and its benefit.</em> It names regions in an ASCII-style map and places elements with <code>grid-area</code>. The benefit is that a media query only redraws the map, so no element needs new positioning rules.</li>
+<li><em>What does <code>repeat(auto-fit, minmax(200px, 1fr))</code> do?</em> It creates as many columns as will fit, each at least 200px and sharing leftover space equally. A responsive grid with no media query.</li>
+<li><em>Make an element span two columns.</em> <code>grid-column: span 2</code>.</li>
+<li><em><code>gap</code> vs margins?</em> <code>gap</code> applies only <em>between</em> tracks, with no edge margins
+  and no collapsing.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="8-javascript-basics-functions" data-title="JavaScript basics & functions">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-8-javascript-basics-functions">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">8</span>
+            <span class="sec-title">JavaScript basics & functions</span>
+          </button>
+          <a class="anchor" href="#8-javascript-basics-functions" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-8-javascript-basics-functions">
+<h3>Theory</h3>
+<p><strong><code>var</code> / <code>let</code> / <code>const</code></strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>var</code></th>
+<th><code>let</code></th>
+<th><code>const</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope</td>
+<td>Function</td>
+<td>Block</td>
+<td>Block</td>
+</tr>
+<tr>
+<td>Redeclare</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Reassign</td>
+<td>Yes</td>
+<td>Yes</td>
+<td><strong>No</strong></td>
+</tr>
+<tr>
+<td>Hoisted</td>
+<td>Yes, as <code>undefined</code></td>
+<td>Yes, but in the <strong>TDZ</strong></td>
+<td>Same</td>
+</tr>
+</tbody>
+</table>
+<p><code>const</code> prevents <em>reassignment</em>, not mutation — <code>const a = [1]; a.push(2)</code> is legal.</p>
+<p><strong>Three ways to write a function</strong></p>
+<pre><code class="language-js">// 1. Declaration — fully hoisted, callable before its definition
+function add(a, b) { return a + b; }
+
+// 2. Expression — only the variable is hoisted, not the function
+var isNumeric = function (text) { ... };
+
+// 3. Arrow — concise; no own `this`, `arguments`, or `prototype`
+const formatSum = (a, symbol, b) =&gt; a + ' ' + symbol + ' ' + b;
+</code></pre>
+<p><strong>Hoisting</strong> — the classic trick question:</p>
+<pre><code class="language-js">sayHi();              // works: declarations are hoisted whole
+function sayHi() {}
+
+sayLater();           // TypeError: sayLater is not a function
+var sayLater = function () {};
+</code></pre>
+<p><strong>Arrow functions and <code>this</code></strong> — the other classic. An arrow has no <code>this</code> of its
+own, it inherits from the enclosing scope. So an arrow is <strong>wrong</strong> when you
+need <code>this</code> to mean the element:</p>
+<pre><code class="language-js">btn.addEventListener('click', function () { this; /* the button */ });
+btn.addEventListener('click', () =&gt; { this; /* outer scope — not the button */ });
+</code></pre>
+<p><strong>Implicit return:</strong> <code>x =&gt; x * 2</code> returns automatically; with braces you must
+write <code>return</code>.</p>
+<p><strong>Type coercion</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>==</code></th>
+<th><code>===</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compares</td>
+<td>Value after coercion</td>
+<td>Value <strong>and</strong> type</td>
+</tr>
+<tr>
+<td><code>5 == "5"</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>0 == false</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>null == undefined</code></td>
+<td><code>true</code></td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Always prefer <code>===</code>.</strong></p>
+<p><strong>Falsy values (memorise all 7):</strong> <code>false</code>, <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code>,
+<code>NaN</code>, <code>0n</code>. Everything else is truthy — including <code>[]</code> and <code>{}</code>.</p>
+<p><strong>Useful methods</strong></p>
+<ul>
+<li>Strings: <code>trim() toLowerCase() split() slice() includes() padStart()</code></li>
+<li>Arrays: <code>push() pop() shift() unshift() splice() slice() forEach() map()
+  filter() find() some() every() indexOf() includes()</code></li>
+<li><code>map</code> returns a new array; <code>forEach</code> returns <code>undefined</code>.</li>
+<li>Conversion: <code>Number(x)</code>, <code>parseInt(x, 10)</code>, <code>String(x)</code>, <code>Number.isFinite(x)</code></li>
+</ul>
+<h3>In your work</h3>
+<p><strong>A08</strong> validation helpers. <strong>A09</strong> deliberately used all three function forms:
+declarations (<code>add</code>, <code>subtract</code>, <code>multiply</code>, <code>divide</code>), expressions
+(<code>showError</code>, <code>validate</code>), arrows (<code>isNumeric</code>, <code>formatNumber</code>, handlers).</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Difference between <code>var</code>, <code>let</code> and <code>const</code>.</em> <code>var</code> is function-scoped and hoisted as undefined; <code>let</code> is block-scoped and reassignable; <code>const</code> is block-scoped and cannot be reassigned, though objects it holds can still be mutated.</li>
+<li><em>What is hoisting? Give an example where a declaration works and an expression fails.</em> Declarations are moved to the top of their scope. Calling <code>sayHi()</code> before <code>function sayHi(){}</code> works; calling <code>fn()</code> before <code>var fn = function(){}</code> throws a TypeError because only the variable is hoisted.</li>
+<li><em>Declaration vs expression vs arrow.</em> A declaration is fully hoisted and callable early. An expression assigns a function to a variable and must be defined first. An arrow is concise, has no own <code>this</code>, <code>arguments</code> or <code>prototype</code>.</li>
+<li><em>Why can't you always use an arrow function as an event handler?</em> No own <code>this</code>.</li>
+<li><em><code>==</code> vs <code>===</code> with examples.</em> <code>==</code> coerces types, so <code>5 == "5"</code> and <code>0 == false</code> are true. <code>===</code> compares value and type, so both are false. Prefer <code>===</code>.</li>
+<li><em>List the falsy values.</em> false, 0, empty string, null, undefined, NaN and 0n. Everything else is truthy, including empty arrays and objects.</li>
+<li><em>What does <code>trim()</code> do and why use it before validating?</em> It removes leading and trailing whitespace, so an entry of only spaces is correctly treated as empty.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="9-dom-manipulation" data-title="DOM manipulation">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-9-dom-manipulation">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">9</span>
+            <span class="sec-title">DOM manipulation</span>
+          </button>
+          <a class="anchor" href="#9-dom-manipulation" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-9-dom-manipulation">
+<h3>Theory</h3>
+<p>The <strong>DOM</strong> is the browser's tree-shaped object model of the page. It is an API
+over the document, not the HTML text itself.</p>
+<p><strong>Selecting</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getElementById(id)</code></td>
+<td>One element or <code>null</code></td>
+</tr>
+<tr>
+<td><code>getElementsByClassName(c)</code></td>
+<td><strong>Live</strong> HTMLCollection</td>
+</tr>
+<tr>
+<td><code>getElementsByTagName(t)</code></td>
+<td>Live HTMLCollection</td>
+</tr>
+<tr>
+<td><code>querySelector(sel)</code></td>
+<td>First match (any CSS selector) or <code>null</code></td>
+</tr>
+<tr>
+<td><code>querySelectorAll(sel)</code></td>
+<td><strong>Static</strong> NodeList</td>
+</tr>
+</tbody>
+</table>
+<p><em>Live</em> means it updates automatically as the DOM changes; <em>static</em> is a snapshot.
+<code>querySelectorAll</code> returns static — a frequent exam point.</p>
+<p><strong>Creating and inserting</strong></p>
+<pre><code class="language-js">const li = document.createElement('li');
+li.textContent = 'Learn JavaScript';     // safe
+li.classList.add('task-item');
+parent.appendChild(li);                  // or prepend, insertBefore, append
+</code></pre>
+<p><strong>Content properties</strong></p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>textContent</code></td>
+<td>Plain text; <strong>escapes HTML</strong> — safe</td>
+</tr>
+<tr>
+<td><code>innerHTML</code></td>
+<td>Parses as markup — <strong>XSS risk</strong> with user input</td>
+</tr>
+<tr>
+<td><code>innerText</code></td>
+<td>Like textContent but respects CSS visibility, slower</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why this matters:</strong> if a user types <code>&lt;img src=x onerror=alert(1)&gt;</code>,
+<code>innerHTML</code> executes it, <code>textContent</code> displays it as text. Your to-do and kanban
+apps use <code>textContent</code> for exactly this reason, and I verified the escaping.</p>
+<p><strong>Attributes vs properties:</strong> <code>getAttribute('href')</code> reads the HTML source value;
+<code>el.href</code> gives the resolved absolute URL. <code>dataset.id</code> maps to <code>data-id</code>.</p>
+<p><strong>Classes:</strong> <code>classList.add() .remove() .toggle() .contains() .replace()</code></p>
+<p><code>classList.toggle('done')</code> adds the class if absent, removes if present, and
+<strong>returns a boolean</strong> of the new state:</p>
+<pre><code class="language-js">const nowDone = item.classList.toggle('completed');
+</code></pre>
+<p><strong>Removing:</strong> <code>element.remove()</code> (modern) or <code>parent.removeChild(child)</code> (old).</p>
+<p><strong>Traversal:</strong> <code>parentNode</code>, <code>children</code>, <code>firstElementChild</code>, <code>nextElementSibling</code>,
+<code>closest(selector)</code> (walks <em>up</em> to the nearest matching ancestor).</p>
+<h3>In your work</h3>
+<p><strong>A10</strong> used all of these: <code>createElement</code>, <code>textContent</code>, <code>classList.add/toggle</code>,
+<code>appendChild</code>, <code>.remove()</code>, <code>dataset.index</code>.
+<strong>A11</strong> added <code>closest('.card')</code> and <code>replaceChild</code> for inline editing.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>What is the DOM?</em> The Document Object Model: the browser's tree-shaped object representation of the page, which JavaScript can read and change.</li>
+<li><em><code>getElementById</code> vs <code>querySelector</code>.</em> <code>getElementById</code> takes only an id and is slightly faster; <code>querySelector</code> accepts any CSS selector and returns the first match.</li>
+<li><em><code>innerHTML</code> vs <code>textContent</code> — which is safer and why?</em> <code>textContent</code> is safer because it escapes markup. <code>innerHTML</code> parses its input, so user-typed HTML such as an onerror image would execute, which is an XSS risk.</li>
+<li><em>Write JS to create an <code>&lt;li&gt;</code> with text and a class, then append it to a <code>&lt;ul&gt;</code>.</em> <code>const li = document.createElement('li'); li.textContent = 'Task'; li.classList.add('item'); list.appendChild(li);</code></li>
+<li><em>What does <code>classList.toggle()</code> return?</em> A boolean giving the new state: true if the class is now present, false if it was removed.</li>
+<li><em>How do you remove an element?</em> <code>element.remove()</code>, or the older <code>parent.removeChild(child)</code>.</li>
+<li><em>Live vs static collection.</em> <code>getElementsByClassName</code> returns a live HTMLCollection that updates as the DOM changes; <code>querySelectorAll</code> returns a static NodeList snapshot.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="10-events-event-delegation" data-title="Events & event delegation">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-10-events-event-delegation">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">10</span>
+            <span class="sec-title">Events & event delegation</span>
+          </button>
+          <a class="anchor" href="#10-events-event-delegation" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-10-events-event-delegation">
+<h3>Theory</h3>
+<p><strong>Registering:</strong></p>
+<pre><code class="language-js">element.addEventListener('click', handler);         // preferred — many handlers
+element.onclick = handler;                           // only one, overwrites
+&lt;button onclick=&quot;doIt()&quot;&gt;                            // inline — avoid
+</code></pre>
+<p><strong>Event object:</strong> <code>event.target</code> (what was actually clicked),
+<code>event.currentTarget</code> (what the listener is attached to),
+<code>event.preventDefault()</code>, <code>event.stopPropagation()</code>.</p>
+<p><strong><code>target</code> vs <code>currentTarget</code> is a favourite exam question.</strong> Click a <code>&lt;span&gt;</code>
+inside a <code>&lt;button&gt;</code> with the listener on the button: <code>target</code> is the span,
+<code>currentTarget</code> is the button.</p>
+<p><strong>Propagation — three phases:</strong>
+1. <strong>Capturing</strong> — window → target (listener needs <code>{capture: true}</code>)
+2. <strong>Target</strong> — at the element
+3. <strong>Bubbling</strong> — target → window (<strong>the default</strong>)</p>
+<p><strong>Event delegation</strong> — the big idea:</p>
+<pre><code class="language-js">// One listener on the parent, instead of one per child
+list.addEventListener('click', function (event) {
+  const item = event.target.closest('.task-item');
+  if (!item) return;
+  if (event.target.classList.contains('btn-delete')) { ... }
+});
+</code></pre>
+<p>Three advantages:
+1. <strong>Works for elements added later</strong> — no rebinding after a re-render.
+2. <strong>Less memory</strong> — one listener instead of hundreds.
+3. <strong>Simpler code</strong> — no cleanup when elements are destroyed.</p>
+<p>This is <em>why</em> your to-do and kanban apps attach one listener to the <code>&lt;ul&gt;</code>/board
+rather than to each card: <code>render()</code> destroys and rebuilds every card, so
+per-card listeners would be lost each time.</p>
+<p><strong><code>preventDefault()</code></strong> stops the browser's default action (form submit reloading,
+link navigating). <strong><code>stopPropagation()</code></strong> stops the bubble. They are different.</p>
+<p><strong>Common events:</strong> <code>click dblclick submit input change focus blur keydown keyup
+mouseenter mouseleave DOMContentLoaded load dragstart dragover drop</code></p>
+<p><code>input</code> fires on every keystroke; <code>change</code> fires when the value is committed
+(blur, or selection made).</p>
+<p><strong>Form submit:</strong></p>
+<pre><code class="language-js">form.addEventListener('submit', function (e) {
+  e.preventDefault();      // without this the page reloads and state is lost
+  addTask();
+});
+</code></pre>
+<p>Using a real <code>&lt;form&gt;</code> gets <strong>Enter-key submission for free</strong> — that is how
+Assignment 10's "Extension 1" worked without any keydown handler.</p>
+<h3>In your work</h3>
+<p><strong>A10/A11</strong> — delegated <code>click</code> on the list/board, <code>event.target</code> dispatch,
+<code>preventDefault()</code> on submit, <code>keydown</code> for Enter/Escape in edit mode.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>What is event bubbling? Name the three phases.</em> Bubbling is the event travelling from the target up to the root. The phases are capturing (root to target), target, then bubbling (target to root).</li>
+<li><em>What is event delegation and why use it?</em> Attaching one listener to a parent and using <code>event.target</code> to identify the child. It keeps working for elements added later, uses less memory, and needs no cleanup when children are destroyed.</li>
+<li><em><code>event.target</code> vs <code>event.currentTarget</code>.</em> <code>target</code> is the element actually clicked; <code>currentTarget</code> is the element the listener is attached to.</li>
+<li><em><code>preventDefault()</code> vs <code>stopPropagation()</code>.</em> <code>preventDefault</code> cancels the browser's default action, such as a form reload. <code>stopPropagation</code> stops the event travelling further up the tree.</li>
+<li><em>Why call <code>preventDefault()</code> on form submit?</em> Without it the page reloads, which discards the JavaScript state you just built.</li>
+<li><em>Three ways to attach a handler; which is best?</em> Inline <code>onclick</code> attribute, the <code>element.onclick</code> property, and <code>addEventListener</code>. The last is best: it allows many handlers and finer control.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="11-drag-and-drop" data-title="Drag and drop">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-11-drag-and-drop">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">11</span>
+            <span class="sec-title">Drag and drop</span>
+          </button>
+          <a class="anchor" href="#11-drag-and-drop" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-11-drag-and-drop">
+<h3>Theory</h3>
+<p>HTML5 drag-and-drop needs <strong>three things</strong>: a draggable source, a drop target
+that <em>allows</em> dropping, and data passed between them.</p>
+<pre><code class="language-js">element.draggable = true;                 // ① opt in, or draggable=&quot;true&quot;
+</code></pre>
+<p><strong>The event sequence</strong></p>
+<table>
+<thead>
+<tr>
+<th>Event</th>
+<th>Fires on</th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dragstart</code></td>
+<td>Source</td>
+<td>Store data, add dragging style</td>
+</tr>
+<tr>
+<td><code>dragover</code></td>
+<td>Target</td>
+<td><strong><code>preventDefault()</code></strong> to allow the drop</td>
+</tr>
+<tr>
+<td><code>dragenter</code>/<code>dragleave</code></td>
+<td>Target</td>
+<td>Highlight / un-highlight</td>
+</tr>
+<tr>
+<td><code>drop</code></td>
+<td>Target</td>
+<td>Read data, perform the move</td>
+</tr>
+<tr>
+<td><code>dragend</code></td>
+<td>Source</td>
+<td>Cleanup, fires even if cancelled</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The counter-intuitive bit:</strong></p>
+<pre><code class="language-js">board.addEventListener('dragover', function (event) {
+  event.preventDefault();          // elements REJECT drops by default;
+                                   // this cancels the rejection
+});
+</code></pre>
+<p>Without <code>preventDefault()</code> in <code>dragover</code>, <strong><code>drop</code> never fires</strong>. You are
+preventing the <em>rejection</em>, not the drop — guaranteed exam question.</p>
+<p><strong><code>dataTransfer</code></strong> carries data for the drag's lifetime, <strong>strings only</strong> — which
+is why you store an ID and look the object up again:</p>
+<pre><code class="language-js">event.dataTransfer.setData('text/plain', card.dataset.id);   // dragstart
+const id = Number(event.dataTransfer.getData('text/plain')); // drop
+</code></pre>
+<p><strong>Key principle:</strong> the drop handler does <strong>not</strong> move the DOM node. It updates
+the data (<code>task.lane = 'done'</code>) and calls <code>render()</code>. The array is the source of
+truth; the DOM is a picture of it.</p>
+<h3>In your work</h3>
+<p><strong>Assignment 11</strong> — kanban with all five events, delegated on the board.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>List the drag-and-drop events in order.</em> dragstart on the source, then dragover and dragenter/dragleave on the target, then drop, and finally dragend on the source.</li>
+<li><em>Why is <code>preventDefault()</code> needed in <code>dragover</code>?</em> Elements reject drops by default. Calling preventDefault cancels that rejection and marks the element a valid drop target; without it the drop event never fires.</li>
+<li><em>How is data passed from source to target?</em> <code>dataTransfer</code>, strings only.</li>
+<li><em>Why store an ID rather than the element?</em> <code>dataTransfer</code> can only hold strings, so you store the id and look the object up again in the drop handler.</li>
+<li><em>Which event fires even when a drag is cancelled?</em> <code>dragend</code>.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="12-objects-classes" data-title="Objects & classes">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-12-objects-classes">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">12</span>
+            <span class="sec-title">Objects & classes</span>
+          </button>
+          <a class="anchor" href="#12-objects-classes" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-12-objects-classes">
+<h3>Theory</h3>
+<p><strong>Object literal</strong></p>
+<pre><code class="language-js">const student = { id: 1, name: 'Leanne' };
+student.name;          // dot notation
+student['name'];       // bracket — needed for dynamic keys
+</code></pre>
+<p><strong>Constructor function (ES5)</strong></p>
+<pre><code class="language-js">function Student(id, name) { this.id = id; this.name = name; }
+Student.prototype.greet = function () { return 'Hi ' + this.name; };
+</code></pre>
+<p><strong>Class (ES6)</strong> — syntactic sugar over the same prototype mechanism:</p>
+<pre><code class="language-js">class Student {
+  constructor(id, name, username, email) { this.id = id; /* ... */ }
+
+  static fromApi(record) { return new Student(record.id, ...); }  // on the CLASS
+  static isValid(record) { ... }
+
+  mailto()   { return 'mailto:' + this.email; }                    // on INSTANCES
+  toString() { return this.name + ' (' + this.username + ')'; }
+}
+</code></pre>
+<p><strong>Class vs constructor function — three real differences:</strong>
+1. A class <strong>cannot be called without <code>new</code></strong> (throws <code>TypeError</code>); a constructor
+   function silently pollutes the global object.
+2. Class methods are <strong>non-enumerable</strong> (hidden from <code>for...in</code>).
+3. Classes are <strong>not hoisted</strong> in a usable way (TDZ).</p>
+<p><strong><code>static</code> vs instance:</strong> <code>static</code> belongs to the class
+(<code>Student.fromApi(...)</code>), instance methods belong to objects
+(<code>student.mailto()</code>). <code>student.fromApi</code> is <code>undefined</code>.</p>
+<p><strong>Why use a class for API data?</strong> (Assignment 12's rationale)
+- Drops fields you do not need (the API sends <code>address</code>, <code>phone</code>, <code>company</code>).
+- <strong>One place to change</strong> if the API renames a field — only <code>fromApi</code> edits.
+- Methods keep display logic on the object (<code>student.mailto()</code>).</p>
+<p><strong><code>this</code> depends on call site:</strong> method call → the object; plain function →
+<code>undefined</code> in strict mode; arrow → enclosing scope.</p>
+<p><strong>JSON:</strong> <code>JSON.stringify(obj)</code> object → string, <code>JSON.parse(str)</code> string →
+object. <strong>JSON is a string format, not an object.</strong> <code>JSON.parse</code> throws on
+malformed input, so wrap it in <code>try/catch</code>.</p>
+<h3>In your work</h3>
+<p><strong>A12</strong> — <code>class Student</code> with <code>constructor</code>, two statics, two instance methods.
+<strong>A10/A11</strong> — <code>localStorage</code> with <code>JSON.stringify</code>/<code>parse</code> in <code>try/catch</code>.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Define a class with a constructor and a method.</em> <code>class Student { constructor(id, name) { this.id = id; this.name = name; } greet() { return 'Hi ' + this.name; } }</code></li>
+<li><em><code>static</code> vs instance method.</em> A static method is called on the class itself, such as <code>Student.fromApi(...)</code>. An instance method is called on an object, such as <code>student.mailto()</code>.</li>
+<li><em>Class vs constructor function — give differences.</em> A class cannot be called without <code>new</code>, its methods are non-enumerable, and it is not usably hoisted. A constructor function allows all three and can silently pollute the global object.</li>
+<li><em>What does <code>new</code> do?</em> Creates an empty object, sets its prototype, binds
+  <code>this</code>, runs the constructor, returns the object.</li>
+<li><em><code>JSON.parse</code> vs <code>JSON.stringify</code>.</em> <code>stringify</code> turns an object into a JSON string for storage or sending; <code>parse</code> turns a JSON string back into an object.</li>
+<li><em>Why wrap <code>JSON.parse</code> in <code>try/catch</code>?</em> It throws on malformed input, so corrupt stored data would break the whole script without a catch.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="13-asynchronous-js-fetch-promises" data-title="Asynchronous JS: fetch & Promises">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-13-asynchronous-js-fetch-promises">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">13</span>
+            <span class="sec-title">Asynchronous JS: fetch & Promises</span>
+          </button>
+          <a class="anchor" href="#13-asynchronous-js-fetch-promises" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-13-asynchronous-js-fetch-promises">
+<h3>Theory</h3>
+<p><strong>Why async?</strong> JavaScript is <strong>single-threaded</strong>. A synchronous network call
+would freeze the entire page. Async work is handed to the browser, and the
+callback is queued for when it finishes.</p>
+<p><strong>Event loop (one-line version):</strong> call stack runs code; completed async work
+waits in the task queue; the loop moves queued callbacks onto the stack only when
+it is empty. Microtasks (promises) jump ahead of macrotasks (<code>setTimeout</code>).</p>
+<p><strong>Promise states:</strong> <code>pending</code> → <code>fulfilled</code> <strong>or</strong> <code>rejected</code>. Once settled it
+never changes.</p>
+<p><strong>The chain — Assignment 12's core:</strong></p>
+<pre><code class="language-js">fetch(API_URL)
+  .then(function (response) {
+    if (!response.ok) {                            // ← ESSENTIAL
+      throw new Error('Request failed with status ' + response.status);
+    }
+    return response.json();                        // returns another promise
+  })
+  .then(function (data) {
+    const students = data.filter(Student.isValid).map(Student.fromApi);
+    showStudents(students);
+  })
+  .catch(function (error) {                        // any failure above
+    setStatus('Could not load: ' + error.message, 'error');
+  })
+  .finally(function () {                           // always, either way
+    loadBtn.disabled = false;
+  });
+</code></pre>
+<p><strong>The single most important exam point:</strong></p>
+<blockquote>
+<p><strong><code>fetch()</code> does not reject on HTTP errors.</strong> A 404 or 500 still <em>resolves</em>.
+<code>fetch</code> only rejects on a <strong>network failure</strong> (no connection, DNS failure, CORS
+block). You must check <code>response.ok</code> and throw manually.</p>
+</blockquote>
+<p>Without that check, a 500 falls through and <code>.json()</code> fails with a confusing
+parse error instead of a clear status message.</p>
+<p><strong>What each link does</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Runs when</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.then(fn)</code></td>
+<td>Previous step fulfilled</td>
+<td>A new promise</td>
+</tr>
+<tr>
+<td><code>.catch(fn)</code></td>
+<td><strong>Any</strong> earlier step rejected or threw</td>
+<td>A new promise</td>
+</tr>
+<tr>
+<td><code>.finally(fn)</code></td>
+<td>Always — success <em>or</em> failure</td>
+<td>Passes the result through</td>
+</tr>
+</tbody>
+</table>
+<p><code>.finally()</code> is for cleanup that must happen regardless: re-enabling a button,
+hiding a spinner, saying "request completed". It receives <strong>no arguments</strong> —
+it does not know whether things succeeded.</p>
+<p><strong>Response methods:</strong> <code>.json()</code>, <code>.text()</code>, <code>.blob()</code> — each returns a <em>promise</em>,
+which is why there are two <code>.then()</code>s.</p>
+<p><strong>Returning inside <code>.then()</code> matters:</strong></p>
+<pre><code class="language-js">return showStudents(students).then(...)   // chain waits for the rows to render
+showStudents(students);                   // chain does NOT wait — bug
+</code></pre>
+<p><strong><code>async</code>/<code>await</code></strong> — sugar over the same promises:</p>
+<pre><code class="language-js">async function load() {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('...');
+    const data = await res.json();
+  } catch (e) { ... } finally { ... }
+}
+</code></pre>
+<p>An <code>async</code> function <strong>always returns a promise</strong>. <code>await</code> only works inside
+<code>async</code>.</p>
+<p><strong>The <code>forEach</code> trap</strong> (this bit you hit for real):</p>
+<pre><code class="language-js">await items.forEach(async (item) =&gt; {       // ✗ does NOT wait
+  await wait(100);
+});
+</code></pre>
+<p><code>forEach</code> <strong>ignores whatever its callback returns</strong>, so awaiting inside it does
+not pause the loop — all callbacks start at once. Use a <code>for...of</code> loop or chain
+promises instead. I measured this in your Assignment 12: all 10 rows appeared at
+25ms instead of staggering.</p>
+<p><strong>Callback hell → promises → async/await</strong> is the historical progression;
+promises solved deep nesting via chaining.</p>
+<p><strong>AJAX</strong> = updating part of a page without a full reload. <code>fetch</code> is the modern
+API; <code>XMLHttpRequest</code> is the older one.</p>
+<p><strong>CORS:</strong> a browser security rule blocking cross-origin requests unless the
+server sends <code>Access-Control-Allow-Origin</code>. JSONPlaceholder sends a permissive
+header, which is why your page works from <code>file://</code>.</p>
+<h3>In your work</h3>
+<p><strong>Assignment 12</strong> — full chain, <code>response.ok</code> check, four distinct error paths,
+<code>.finally()</code> with a visible completion line, and staggered row rendering via
+chained promises.</p>
+<h3>Probable questions</h3>
+<ul>
+<li><em>Why is async programming needed in JS?</em> Single thread; avoid blocking.</li>
+<li><em>What are the three promise states?</em> Pending, then either fulfilled or rejected. Once settled the state never changes again.</li>
+<li><em>Write a fetch with <code>.then()</code>, <code>.catch()</code> and <code>.finally()</code>.</em> <code>fetch(url).then(r =&gt; { if (!r.ok) throw new Error(r.status); return r.json(); }).then(showData).catch(showError).finally(hideSpinner);</code></li>
+<li><em>Does <code>fetch</code> reject on a 404?</em> <strong>No</strong> — explain <code>response.ok</code>.</li>
+<li><em>Difference between <code>.then()</code> and <code>.finally()</code>.</em> <code>.then</code> runs only on success and receives the value; <code>.finally</code> runs on both success and failure, receives no arguments, and is for cleanup.</li>
+<li><em>Why does <code>response.json()</code> need its own <code>.then()</code>?</em> It returns a promise.</li>
+<li><em>Convert a promise chain to <code>async</code>/<code>await</code>.</em> Mark the function <code>async</code>, <code>await</code> each promise, and replace <code>.catch</code>/<code>.finally</code> with <code>try</code>/<code>catch</code>/<code>finally</code>.</li>
+<li><em>What is AJAX? What is CORS?</em> AJAX is updating part of a page without a full reload. CORS is the browser rule blocking cross-origin requests unless the server sends an Access-Control-Allow-Origin header.</li>
+</ul>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="14-quick-reference-tables" data-title="Quick-reference tables">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-14-quick-reference-tables">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">14</span>
+            <span class="sec-title">Quick-reference tables</span>
+          </button>
+          <a class="anchor" href="#14-quick-reference-tables" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-14-quick-reference-tables">
+<h3>Must-memorise numbers &amp; facts</h3>
+<table>
+<thead>
+<tr>
+<th>Fact</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Falsy values</td>
+<td><code>false, 0, "", null, undefined, NaN, 0n</code></td>
+</tr>
+<tr>
+<td>Promise states</td>
+<td>pending, fulfilled, rejected</td>
+</tr>
+<tr>
+<td>Event phases</td>
+<td>capturing, target, bubbling</td>
+</tr>
+<tr>
+<td>Box model layers</td>
+<td>content, padding, border, margin</td>
+</tr>
+<tr>
+<td>Margin shorthand</td>
+<td>top, right, bottom, left (clockwise)</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code> per page</td>
+<td>Exactly one</td>
+</tr>
+<tr>
+<td>Specificity order</td>
+<td>inline &gt; id &gt; class &gt; type</td>
+</tr>
+<tr>
+<td><code>fetch</code> rejects on</td>
+<td>Network failure only — <strong>not</strong> HTTP errors</td>
+</tr>
+<tr>
+<td><code>dragover</code> needs</td>
+<td><code>preventDefault()</code></td>
+</tr>
+<tr>
+<td><code>forEach</code> returns</td>
+<td><code>undefined</code> (ignores callback returns)</td>
+</tr>
+</tbody>
+</table>
+<h3>CSS property → purpose</h3>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Predictable widths</td>
+<td><code>box-sizing: border-box</code></td>
+</tr>
+<tr>
+<td>Centre a block</td>
+<td><code>margin: 0 auto</code></td>
+</tr>
+<tr>
+<td>Centre anything</td>
+<td><code>display:flex; justify-content:center; align-items:center</code></td>
+</tr>
+<tr>
+<td>Element above others</td>
+<td><code>position</code> + <code>z-index</code></td>
+</tr>
+<tr>
+<td>Hide but keep space</td>
+<td><code>visibility: hidden</code></td>
+</tr>
+<tr>
+<td>Hide completely</td>
+<td><code>display: none</code></td>
+</tr>
+<tr>
+<td>Responsive columns</td>
+<td><code>repeat(auto-fit, minmax(200px, 1fr))</code></td>
+</tr>
+<tr>
+<td>Screen-reader-only</td>
+<td><code>clip-path: inset(50%)</code> + 1px size</td>
+</tr>
+</tbody>
+</table>
+<h3>JS "which one do I use"</h3>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Safe text insert</td>
+<td><code>textContent</code></td>
+</tr>
+<tr>
+<td>Element by CSS selector</td>
+<td><code>querySelector</code></td>
+</tr>
+<tr>
+<td>Handle clicks on many items</td>
+<td>Delegation + <code>event.target</code></td>
+</tr>
+<tr>
+<td>Nearest matching ancestor</td>
+<td><code>closest()</code></td>
+</tr>
+<tr>
+<td>Toggle a state class</td>
+<td><code>classList.toggle()</code></td>
+</tr>
+<tr>
+<td>Persist across refresh</td>
+<td><code>localStorage</code> + <code>JSON.stringify</code></td>
+</tr>
+<tr>
+<td>Remove an element</td>
+<td><code>.remove()</code></td>
+</tr>
+<tr>
+<td>Always-run cleanup</td>
+<td><code>.finally()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+        </div>
+      </section>
+
+      <section class="section" id="15-exam-strategy" data-title="Exam strategy">
+        <h2 class="section-head">
+          <button type="button" class="collapse-btn" aria-expanded="true"
+                  aria-controls="body-15-exam-strategy">
+            <span class="chev" aria-hidden="true">&#9662;</span>
+            <span class="sec-num">15</span>
+            <span class="sec-title">Exam strategy</span>
+          </button>
+          <a class="anchor" href="#15-exam-strategy" aria-label="Link to this section">#</a>
+        </h2>
+        <div class="section-body" id="body-15-exam-strategy">
+<p><strong>Likely paper structure:</strong> short answers (definitions, comparisons) → code
+snippets (write CSS for X, write JS to do Y) → output prediction → one longer
+"explain and justify" question.</p>
+<p><strong>The comparisons most likely to appear</strong> — have a one-line answer ready for each:
+<code>GET/POST</code> · <code>id/class</code> · <code>block/inline</code> · <code>margin/padding</code> · <code>content-box/border-box</code>
+· <code>relative/absolute</code> · <code>flex/grid</code> · <code>var/let/const</code> · <code>==/===</code> ·
+<code>innerHTML/textContent</code> · <code>target/currentTarget</code> · <code>.then/.catch/.finally</code> ·
+<code>declaration/expression/arrow</code></p>
+<p><strong>Code questions — write the comment too.</strong> Markers award method marks for
+showing you know <em>why</em> (<code>/* preventDefault stops the page reloading */</code>).</p>
+<p><strong>Three "gotcha" answers that score well:</strong>
+1. <code>fetch</code> does not reject on 404/500 — check <code>response.ok</code>.
+2. <code>dragover</code> needs <code>preventDefault()</code> or <code>drop</code> never fires.
+3. <code>await</code> inside <code>forEach</code> does not wait.</p>
+<p><strong>If you forget a property name,</strong> describe the behaviour and name the concept.
+Partial credit is real.</p>
+<p><strong>Diagrams:</strong> the box model and the three event phases are quick to sketch and
+often worth easy marks.</p>
+<p><strong>From your own assignments, be ready to explain:</strong>
+- A04 — why global <code>border-box</code>
+- A06 — why the dropdown parent needs <code>position: relative</code>
+- A07 — why named grid areas simplify media queries
+- A09 — the three function forms and hoisting
+- A10 — why one delegated listener instead of per-item listeners
+- A11 — why the drop handler changes data rather than moving DOM nodes
+- A12 — why <code>response.ok</code> must be checked manually</p>
+<hr />
+<p><em>Good luck. The strongest preparation is being able to open any one of your
+twelve assignments and explain every line in it.</em></p>
+        </div>
+      </section>
+    </div>
+
+    <div id="no-results">
+      <strong>No matches.</strong><br>Try another word, or clear the search box.
+    </div>
+  </main>
+
+</div>
+
+<div class="quiz-overlay" id="quiz" role="dialog" aria-modal="true" aria-label="Flashcard quiz">
+  <div class="quiz-card">
+    <div class="quiz-top">
+      <span class="quiz-topic" id="quiz-topic"></span>
+      <span><span id="quiz-i">1</span> / <span id="quiz-n">0</span></span>
+    </div>
+    <p class="quiz-q" id="quiz-q"></p>
+    <div class="quiz-a" id="quiz-a" hidden></div>
+    <div class="quiz-actions">
+      <button type="button" class="btn btn-primary" id="reveal-btn">Show answer</button>
+      <button type="button" class="btn btn-quiet" id="next-btn">Next &rarr;</button>
+      <button type="button" class="btn btn-quiet" id="shuffle-btn">Shuffle</button>
+      <button type="button" class="btn btn-ghost" id="close-quiz">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+var INDEX = [{"slug": "1-html-foundations-semantic-markup", "title": "HTML foundations & semantic markup", "num": "1", "text": "Theory Semantic HTML means choosing elements for what the content means , not how it looks. <header is not \"a bar at the top\", it is \"introductory content\". Why it matters (three standard exam answers): 1. Accessibility \u2014 screen readers build a navigable outline from landmarks. 2. SEO \u2014 search engines weight <h1 and <article content. 3. Maintainability \u2014 <nav tells the next developer more than <div class=\"nav\" . Document structure html <!DOCTYPE html <! triggers standards mode, NOT quirks mode <html lang=\"en\" <! lang aids screen readers and translation <head <meta charset=\"utf 8\" <! must be first 1024 bytes <meta name=\"viewport\" content=\"width=device width, initial scale=1\" <title ...</title <! required </head <body ... </body </html Block vs inline Block Inline Starts on a new line Flows within a line Takes full available width Takes only content width width/height apply width/height ignored div p h1 h6 ul ol li table section span a strong em img code inline block = flows inline, but accepts width/height/vertical margins. Key semantic elements Element Means <header Introductory content for page or section <nav Major navigation block <main Dominant content \u2014 only one per page , not nested in header/nav/footer <article Self contained, independently distributable <section Thematic grouping, normally with a heading <aside Tangentially related (sidebar) <footer Closing info for page or section <figure / <figcaption Image with caption <time datetime=\"2026 10 07\" Machine readable date <article vs <section : if the content would still make sense pulled out and published on its own (a blog post, a product card), use <article . Otherwise <section . Tables \u2014 only for tabular data, never layout. html <table <caption Academic record</caption <thead <tr <th scope=\"col\" Exam</th </tr </thead <tbody <tr <td EMIT</td </tr </tbody </table scope=\"col\" / scope=\"row\" tells a screen reader which header governs which cell. Lists: <ul unordered, <ol ordered, <dl / <dt / <dd for term\u2013definition pairs. In your work Assignment 01 (CV) used article, header, section, main, footer, address, time, dl/dt/dd, table/thead/tbody/caption . Assignment 12 used <caption and scope=\"col\" in the student table. Probable questions Define semantic HTML and give three benefits. Choosing elements for what content means, not how it looks. Benefits: accessibility, SEO, maintainability. Difference between <section and <div ? <section carries meaning and belongs in the outline; <div is a styling hook with no meaning. Why <!DOCTYPE html ? Standards mode; without it browsers use quirks mode and the box model behaves differently. Block vs inline with examples. Block starts on a new line and fills the width, and respects width/height: div, p, h1, ul, section. Inline flows within a line and ignores width/height: span, a, strong, em. Write the skeleton of a valid HTML5 page. <!DOCTYPE html , <html lang , <head with charset + viewport + title, then <body . What does alt do? Text alternative for screen readers and for when the image fails to load. Decorative images take alt=\"\" ."}, {"slug": "2-forms-input-validation", "title": "Forms & input validation", "num": "2", "text": "Theory html <form action=\"/submit\" method=\"post\" GET vs POST \u2014 classic exam question: GET POST Data location URL query string Request body Visible in address bar Yes No Length limit ~2048 chars Effectively none Bookmarkable / cached Yes No Use for Searches, filters (idempotent) Logins, uploads, anything that changes state Labels \u2014 every control needs one: html <label for=\"email\" Email</label <input type=\"email\" id=\"email\" name=\"email\" for must match the input's id . Clicking the label focuses the input, and screen readers announce it. name is what gets submitted; id is for for /CSS/JS. Without name , the field is not sent. Input types: text password email number date checkbox radio submit reset file tel url range color hidden Radio buttons sharing one name become mutually exclusive \u2014 that is why the shared name matters. HTML5 validation attributes: required , minlength , maxlength , min , max , step , pattern , placeholder , readonly , disabled , autocomplete placeholder is a hint, not a label \u2014 it disappears on typing. Grouping: <fieldset + <legend (e.g. a group of radio buttons). <select with <option ; <datalist gives a free text field with suggestions. Client vs server validation: client side is for user convenience and can be bypassed (DevTools, curl). Server side is the real security boundary. Always do both. In your work Assignment 02 used text, password, email, number, date, checkbox, radio, submit, reset, plus required/minlength/maxlength/min/max/pattern/title . A08/A09/A10/A11 added JS validation on top ( trim() , empty checks, duplicates). Probable questions GET vs POST. GET puts data in the URL, is limited in length, bookmarkable and cacheable, for reads. POST puts data in the request body, has no practical limit, is not cached, for anything that changes state. Purpose of <label for ? Accessibility + enlarged click target. Difference between name and id ? name submits, id identifies. Why do radio buttons need the same name ? It makes them one group so only one can be chosen. List five input types with purposes. text (free text), email (format check), number (numeric with min/max), date (date picker), radio (one choice from a group), checkbox (independent on/off). Is client side validation enough? No \u2014 explain bypass + server side."}, {"slug": "3-css-fundamentals-selectors", "title": "CSS fundamentals & selectors", "num": "3", "text": "Theory Three ways to apply CSS Method Syntax Notes Inline <p style=\"...\" Highest specificity, unmaintainable, avoid Internal <style in <head Single page only External <link rel=\"stylesheet\" href=\"style.css\" Preferred \u2014 caching, reuse, separation of concerns Selectors css / universal / p / type / .card / class \u2014 reusable / header / id \u2014 unique per page / [type=\"text\"] / attribute / Combinators (common exam question): Combinator Syntax Meaning Descendant A B B anywhere inside A Child A B B is a direct child of A Adjacent sibling A + B B immediately follows A, same parent General sibling A ~ B Any B after A, same parent Pseudo classes (a state ): :hover :focus :active :visited :first child :last child :nth child(n) :not() :checked :disabled :focus within Pseudo elements (a part , written with :: ): ::before ::after ::first line ::first letter ::before / ::after require a content property or they do not render. Specificity \u2014 calculate as (inline, id, class, type): Selector Value p 0,0,0,1 .card 0,0,1,0 nav 0,1,0,0 nav .item a 0,1,1,1 style=\"...\" 1,0,0,0 !important overrides everything (avoid) Equal specificity \u2192 last rule wins (that's the \"cascade\"). Inheritance: text properties inherit ( color , font family , line height ); box properties do not ( margin , padding , border , width ). Units Unit Relative to px Absolute % Parent em Parent's font size (compounds when nested) rem Root font size (no compounding \u2014 safer) vw / vh 1% of viewport width/height fr Fraction of free space (Grid only) CSS variables css :root { navy: 14293f; } .header { color: var( navy); } Defined on :root so they are globally available; change once, applies everywhere. In your work Every assignment from 03 onwards uses an external stylesheet and :root variables. A05 demonstrates all four combinators explicitly. Probable questions Three ways to include CSS; which is best and why? Inline, internal <style , external <link . External is best: cached across pages, reusable, keeps structure separate from presentation. Explain the four combinators with examples. A B descendant (any depth), A B direct child, A + B immediately next sibling, A ~ B any later sibling. Calculate specificity of nav ul li a:hover . \u2192 0,1,1,3 ( :hover counts as a class) Pseudo class vs pseudo element. A pseudo class targets a state ( :hover , :first child ), single colon. A pseudo element targets a part of the element ( ::before , ::first line ), double colon. em vs rem . em is relative to the parent's font size and compounds when nested; rem is relative to the root font size and does not compound. What does \"cascading\" mean? Rules combine by origin, specificity, then source order."}, {"slug": "4-the-box-model", "title": "The box model", "num": "4", "text": "Theory Every element is a rectangle of four layers, inside out: \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 margin (transparent, outside) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 border \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502 \u2502 \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500 padding (inside, takes bg) \u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u2502 \u2502 \u2502 \u2502 \u2502 content (width \u00d7 height) \u2502 \u2502 \u2502 \u2502 \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2502 \u2502 \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2502 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 box sizing \u2014 the single most examinable idea here css / content box (default) / width: 300px; padding: 20px; border: 5px solid; / rendered width = 300 + 20+20 + 5+5 = 350px \u2190 surprising / / border box / { box sizing: border box; } width: 300px; padding: 20px; border: 5px solid; / rendered width = 300px exactly; content shrinks to 250px / Be ready to compute a rendered width both ways . Margin is never included in either calculation. Shorthand order is clockwise from top: css margin: 10px; / all four / margin: 10px 20px; / vertical horizontal / margin: 10px 20px 30px; / top horizontal bottom / margin: 10px 20px 30px 40px; / top right bottom left (TRouBLe) / Margin collapsing \u2014 adjacent vertical margins merge into the larger of the two; 30px below + 20px above = 30px gap, not 50px . Horizontal margins never collapse. margin: 0 auto horizontally centres a block that has a set width. overflow : visible (default) hidden scroll auto display : block inline inline block none flex grid display: none removes from layout entirely; visibility: hidden keeps the space. In your work Assignment 04 was built entirely on this: global border box , a margin/padding experiment, and overflow x: hidden . Probable questions Draw and label the box model. Content in the middle, then padding, then border, then margin on the outside. An element has width:200px; padding:10px; border:2px . Total width under each box sizing ? \u2192 content box: 200+20+4 = 224px ; border box: 200px Why set box sizing: border box globally? Declared width = rendered width, so layout maths stays predictable. What is margin collapsing? Adjacent vertical margins merge into the larger of the two rather than adding. 30px below plus 20px above gives a 30px gap. Horizontal margins never collapse. display:none vs visibility:hidden . display:none removes the element from layout entirely; visibility:hidden hides it but keeps its space reserved. How do you centre a block horizontally? margin: 0 auto with a width."}, {"slug": "5-flexbox", "title": "Flexbox", "num": "5", "text": "Theory One dimensional layout \u2014 a row or a column. (Grid is two dimensional.) Axes: flex direction sets the main axis ; the cross axis is perpendicular. With row , main = horizontal. With column , main = vertical \u2014 so justify content then controls vertical placement. Examiners love this. Container properties Property Values display flex \\ inline flex flex direction row \\ row reverse \\ column \\ column reverse flex wrap nowrap \\ wrap \\ wrap reverse justify content flex start \\ flex end \\ center \\ space between \\ space around \\ space evenly align items stretch \\ flex start \\ flex end \\ center \\ baseline align content aligns multiple lines (needs wrapping) gap spacing between items justify content = main axis. align items = cross axis. Item properties Property Meaning flex grow Share of extra space (default 0) flex shrink How it shrinks (default 1) flex basis Starting size before grow/shrink flex: 1 1 200px shorthand grow/shrink/basis align self Override align items for one item order Visual reorder (does not change DOM/tab order) Perfect centring: css .box { display: flex; justify content: center; align items: center; } In your work A05 nav bar ( display:flex , flex wrap , nested flex containers). A08\u2013A12 use flex for form rows, card metadata and button groups. Probable questions Flexbox vs Grid \u2014 when to use each? Flex = 1D, content driven, good for a nav bar or button row. Grid = 2D, layout driven, good for a page skeleton. justify content vs align items . justify content positions items along the main axis; align items positions them along the cross axis. What does flex: 1 mean? flex grow:1; flex shrink:1; flex basis:0 \u2014 equal share. Centre a div both ways using flexbox. display:flex; justify content:center; align items:center on the parent. What changes if flex direction: column ? The axes swap."}, {"slug": "6-positioning-dropdown-menus", "title": "Positioning & dropdown menus", "num": "6", "text": "Theory position Behaviour static Default. top/left ignored relative Offset from its normal spot ; original space preserved absolute Removed from flow; positioned against nearest positioned ancestor fixed Removed from flow; positioned against the viewport (stays on scroll) sticky Relative until a scroll threshold, then fixed The dropdown pattern \u2014 the core of Assignment 06: css .dropdown { position: relative; } / \u2460 containing block / .dropdown menu { position: absolute; / \u2461 out of flow / top: 100%; left: 0; / \u2462 directly below parent / display: none; / \u2463 hidden / z index: 1000; } / \u2464 above page content / .dropdown:hover .dropdown menu { display: block; } / \u2465 reveal / Why each line matters: relative on the parent makes it the reference for the absolute child. Without it, the menu positions against the whole page. absolute takes the panel out of flow, so opening it does not push the other nav items sideways . top: 100% = \"100% of the parent's height down\" = immediately below it. z index needs a positioned element to work at all. Second level opens sideways with left: 100% instead of top: 100% . Stacking context: z index only applies to positioned elements. A new stacking context is created by position + z index , and also by opacity < 1 , transform , filter . A child can never escape its parent's stacking context \u2014 a common source of \"my z index: 9999 doesn't work\". In your work Assignment 06 \u2014 two level CSS only dropdown, 15 pages, no JavaScript. Probable questions Compare the five position values. static (default, offsets ignored), relative (offset from normal spot, space kept), absolute (out of flow, against nearest positioned ancestor), fixed (out of flow, against the viewport), sticky (relative until a scroll threshold, then fixed). Why does the dropdown parent need position: relative ? It makes the parent the containing block, so the absolutely positioned menu is placed against it instead of against the page. Write CSS for a hover dropdown. Parent position:relative ; menu position:absolute; top:100%; display:none; z index:1000 ; then .dropdown:hover .dropdown menu { display:block; } . What is z index and when does it not work? Only on positioned elements; also constrained by stacking contexts. How do you make a submenu open to the right? left: 100%; top: 0 . absolute vs fixed . Both leave the normal flow. Absolute positions against the nearest positioned ancestor and scrolls with the page; fixed positions against the viewport and stays put when scrolling."}, {"slug": "7-css-grid", "title": "CSS Grid", "num": "7", "text": "Theory Two dimensional \u2014 rows and columns together. css .layout { display: grid; grid template columns: repeat(3, 1fr) minmax(240px, 300px); gap: 22px; grid template areas: \"nav nav nav nav\" \"feature feature feature sidebar\" \"col one col two col three sidebar\" \"footer footer footer footer\"; } .site nav { grid area: nav; } .sidebar { grid area: sidebar; } Sizing functions Function Meaning 1fr One share of leftover space repeat(3, 1fr) Three equal columns minmax(240px, 300px) Never below 240, never above 300 auto fit / auto fill Fit as many tracks as will fit repeat(auto fit, minmax(200px, 1fr)) The classic responsive grid, no media query Placement : by named area (readable, self documenting) or by line number ( grid column: 1 / 3 , meaning from line 1 to line 3 = spanning 2 columns). Note lines are 1 indexed and you count lines , not columns. Advantage of named areas: a media query only has to redraw the area map \u2014 no element needs new positioning rules. css @media (max width: 900px) { .layout { grid template columns: repeat(2, 1fr); grid template areas: \"nav nav\" \"feature feature\" \"col one col two\" \"footer footer\"; } } Alignment: justify items / align items (items in their cell), justify content / align content (the whole grid in the container). place items: center is shorthand for both. Liquid vs fixed layout: liquid uses fr / % / minmax so it fills any viewport; fixed uses px and leaves gaps or overflows. In your work Assignment 07 \u2014 liquid layout with named areas, redrawn at 900px and 600px. Assignment 11 \u2014 three kanban lanes with repeat(3, 1fr) . Probable questions Grid vs Flexbox. Grid is two dimensional, for rows and columns together, layout driven. Flexbox is one dimensional, a single row or column, content driven. What is fr ? A fraction of the remaining free space after fixed tracks. Explain grid template areas and its benefit. It names regions in an ASCII style map and places elements with grid area . The benefit is that a media query only redraws the map, so no element needs new positioning rules. What does repeat(auto fit, minmax(200px, 1fr)) do? It creates as many columns as will fit, each at least 200px and sharing leftover space equally. A responsive grid with no media query. Make an element span two columns. grid column: span 2 . gap vs margins? gap applies only between tracks, with no edge margins and no collapsing."}, {"slug": "8-javascript-basics-functions", "title": "JavaScript basics & functions", "num": "8", "text": "Theory var / let / const var let const Scope Function Block Block Redeclare Yes No No Reassign Yes Yes No Hoisted Yes, as undefined Yes, but in the TDZ Same const prevents reassignment , not mutation \u2014 const a = [1]; a.push(2) is legal. Three ways to write a function js // 1. Declaration \u2014 fully hoisted, callable before its definition function add(a, b) { return a + b; } // 2. Expression \u2014 only the variable is hoisted, not the function var isNumeric = function (text) { ... }; // 3. Arrow \u2014 concise; no own this , arguments , or prototype const formatSum = (a, symbol, b) = a + ' ' + symbol + ' ' + b; Hoisting \u2014 the classic trick question: js sayHi(); // works: declarations are hoisted whole function sayHi() {} sayLater(); // TypeError: sayLater is not a function var sayLater = function () {}; Arrow functions and this \u2014 the other classic. An arrow has no this of its own, it inherits from the enclosing scope. So an arrow is wrong when you need this to mean the element: js btn.addEventListener('click', function () { this; / the button / }); btn.addEventListener('click', () = { this; / outer scope \u2014 not the button / }); Implicit return: x = x 2 returns automatically; with braces you must write return . Type coercion == === Compares Value after coercion Value and type 5 == \"5\" true false 0 == false true false null == undefined true false Always prefer === . Falsy values (memorise all 7): false , 0 , \"\" , null , undefined , NaN , 0n . Everything else is truthy \u2014 including [] and {} . Useful methods Strings: trim() toLowerCase() split() slice() includes() padStart() Arrays: push() pop() shift() unshift() splice() slice() forEach() map() filter() find() some() every() indexOf() includes() map returns a new array; forEach returns undefined . Conversion: Number(x) , parseInt(x, 10) , String(x) , Number.isFinite(x) In your work A08 validation helpers. A09 deliberately used all three function forms: declarations ( add , subtract , multiply , divide ), expressions ( showError , validate ), arrows ( isNumeric , formatNumber , handlers). Probable questions Difference between var , let and const . var is function scoped and hoisted as undefined; let is block scoped and reassignable; const is block scoped and cannot be reassigned, though objects it holds can still be mutated. What is hoisting? Give an example where a declaration works and an expression fails. Declarations are moved to the top of their scope. Calling sayHi() before function sayHi(){} works; calling fn() before var fn = function(){} throws a TypeError because only the variable is hoisted. Declaration vs expression vs arrow. A declaration is fully hoisted and callable early. An expression assigns a function to a variable and must be defined first. An arrow is concise, has no own this , arguments or prototype . Why can't you always use an arrow function as an event handler? No own this . == vs === with examples. == coerces types, so 5 == \"5\" and 0 == false are true. === compares value and type, so both are false. Prefer === . List the falsy values. false, 0, empty string, null, undefined, NaN and 0n. Everything else is truthy, including empty arrays and objects. What does trim() do and why use it before validating? It removes leading and trailing whitespace, so an entry of only spaces is correctly treated as empty."}, {"slug": "9-dom-manipulation", "title": "DOM manipulation", "num": "9", "text": "Theory The DOM is the browser's tree shaped object model of the page. It is an API over the document, not the HTML text itself. Selecting Method Returns getElementById(id) One element or null getElementsByClassName(c) Live HTMLCollection getElementsByTagName(t) Live HTMLCollection querySelector(sel) First match (any CSS selector) or null querySelectorAll(sel) Static NodeList Live means it updates automatically as the DOM changes; static is a snapshot. querySelectorAll returns static \u2014 a frequent exam point. Creating and inserting js const li = document.createElement('li'); li.textContent = 'Learn JavaScript'; // safe li.classList.add('task item'); parent.appendChild(li); // or prepend, insertBefore, append Content properties Property Behaviour textContent Plain text; escapes HTML \u2014 safe innerHTML Parses as markup \u2014 XSS risk with user input innerText Like textContent but respects CSS visibility, slower Why this matters: if a user types <img src=x onerror=alert(1) , innerHTML executes it, textContent displays it as text. Your to do and kanban apps use textContent for exactly this reason, and I verified the escaping. Attributes vs properties: getAttribute('href') reads the HTML source value; el.href gives the resolved absolute URL. dataset.id maps to data id . Classes: classList.add() .remove() .toggle() .contains() .replace() classList.toggle('done') adds the class if absent, removes if present, and returns a boolean of the new state: js const nowDone = item.classList.toggle('completed'); Removing: element.remove() (modern) or parent.removeChild(child) (old). Traversal: parentNode , children , firstElementChild , nextElementSibling , closest(selector) (walks up to the nearest matching ancestor). In your work A10 used all of these: createElement , textContent , classList.add/toggle , appendChild , .remove() , dataset.index . A11 added closest('.card') and replaceChild for inline editing. Probable questions What is the DOM? The Document Object Model: the browser's tree shaped object representation of the page, which JavaScript can read and change. getElementById vs querySelector . getElementById takes only an id and is slightly faster; querySelector accepts any CSS selector and returns the first match. innerHTML vs textContent \u2014 which is safer and why? textContent is safer because it escapes markup. innerHTML parses its input, so user typed HTML such as an onerror image would execute, which is an XSS risk. Write JS to create an <li with text and a class, then append it to a <ul . const li = document.createElement('li'); li.textContent = 'Task'; li.classList.add('item'); list.appendChild(li); What does classList.toggle() return? A boolean giving the new state: true if the class is now present, false if it was removed. How do you remove an element? element.remove() , or the older parent.removeChild(child) . Live vs static collection. getElementsByClassName returns a live HTMLCollection that updates as the DOM changes; querySelectorAll returns a static NodeList snapshot."}, {"slug": "10-events-event-delegation", "title": "Events & event delegation", "num": "10", "text": "Theory Registering: js element.addEventListener('click', handler); // preferred \u2014 many handlers element.onclick = handler; // only one, overwrites <button onclick=\"doIt()\" // inline \u2014 avoid Event object: event.target (what was actually clicked), event.currentTarget (what the listener is attached to), event.preventDefault() , event.stopPropagation() . target vs currentTarget is a favourite exam question. Click a <span inside a <button with the listener on the button: target is the span, currentTarget is the button. Propagation \u2014 three phases: 1. Capturing \u2014 window \u2192 target (listener needs {capture: true} ) 2. Target \u2014 at the element 3. Bubbling \u2014 target \u2192 window ( the default ) Event delegation \u2014 the big idea: js // One listener on the parent, instead of one per child list.addEventListener('click', function (event) { const item = event.target.closest('.task item'); if (!item) return; if (event.target.classList.contains('btn delete')) { ... } }); Three advantages: 1. Works for elements added later \u2014 no rebinding after a re render. 2. Less memory \u2014 one listener instead of hundreds. 3. Simpler code \u2014 no cleanup when elements are destroyed. This is why your to do and kanban apps attach one listener to the <ul /board rather than to each card: render() destroys and rebuilds every card, so per card listeners would be lost each time. preventDefault() stops the browser's default action (form submit reloading, link navigating). stopPropagation() stops the bubble. They are different. Common events: click dblclick submit input change focus blur keydown keyup mouseenter mouseleave DOMContentLoaded load dragstart dragover drop input fires on every keystroke; change fires when the value is committed (blur, or selection made). Form submit: js form.addEventListener('submit', function (e) { e.preventDefault(); // without this the page reloads and state is lost addTask(); }); Using a real <form gets Enter key submission for free \u2014 that is how Assignment 10's \"Extension 1\" worked without any keydown handler. In your work A10/A11 \u2014 delegated click on the list/board, event.target dispatch, preventDefault() on submit, keydown for Enter/Escape in edit mode. Probable questions What is event bubbling? Name the three phases. Bubbling is the event travelling from the target up to the root. The phases are capturing (root to target), target, then bubbling (target to root). What is event delegation and why use it? Attaching one listener to a parent and using event.target to identify the child. It keeps working for elements added later, uses less memory, and needs no cleanup when children are destroyed. event.target vs event.currentTarget . target is the element actually clicked; currentTarget is the element the listener is attached to. preventDefault() vs stopPropagation() . preventDefault cancels the browser's default action, such as a form reload. stopPropagation stops the event travelling further up the tree. Why call preventDefault() on form submit? Without it the page reloads, which discards the JavaScript state you just built. Three ways to attach a handler; which is best? Inline onclick attribute, the element.onclick property, and addEventListener . The last is best: it allows many handlers and finer control."}, {"slug": "11-drag-and-drop", "title": "Drag and drop", "num": "11", "text": "Theory HTML5 drag and drop needs three things : a draggable source, a drop target that allows dropping, and data passed between them. js element.draggable = true; // \u2460 opt in, or draggable=\"true\" The event sequence Event Fires on Job dragstart Source Store data, add dragging style dragover Target preventDefault() to allow the drop dragenter / dragleave Target Highlight / un highlight drop Target Read data, perform the move dragend Source Cleanup, fires even if cancelled The counter intuitive bit: js board.addEventListener('dragover', function (event) { event.preventDefault(); // elements REJECT drops by default; // this cancels the rejection }); Without preventDefault() in dragover , drop never fires . You are preventing the rejection , not the drop \u2014 guaranteed exam question. dataTransfer carries data for the drag's lifetime, strings only \u2014 which is why you store an ID and look the object up again: js event.dataTransfer.setData('text/plain', card.dataset.id); // dragstart const id = Number(event.dataTransfer.getData('text/plain')); // drop Key principle: the drop handler does not move the DOM node. It updates the data ( task.lane = 'done' ) and calls render() . The array is the source of truth; the DOM is a picture of it. In your work Assignment 11 \u2014 kanban with all five events, delegated on the board. Probable questions List the drag and drop events in order. dragstart on the source, then dragover and dragenter/dragleave on the target, then drop, and finally dragend on the source. Why is preventDefault() needed in dragover ? Elements reject drops by default. Calling preventDefault cancels that rejection and marks the element a valid drop target; without it the drop event never fires. How is data passed from source to target? dataTransfer , strings only. Why store an ID rather than the element? dataTransfer can only hold strings, so you store the id and look the object up again in the drop handler. Which event fires even when a drag is cancelled? dragend ."}, {"slug": "12-objects-classes", "title": "Objects & classes", "num": "12", "text": "Theory Object literal js const student = { id: 1, name: 'Leanne' }; student.name; // dot notation student['name']; // bracket \u2014 needed for dynamic keys Constructor function (ES5) js function Student(id, name) { this.id = id; this.name = name; } Student.prototype.greet = function () { return 'Hi ' + this.name; }; Class (ES6) \u2014 syntactic sugar over the same prototype mechanism: js class Student { constructor(id, name, username, email) { this.id = id; / ... / } static fromApi(record) { return new Student(record.id, ...); } // on the CLASS static isValid(record) { ... } mailto() { return 'mailto:' + this.email; } // on INSTANCES toString() { return this.name + ' (' + this.username + ')'; } } Class vs constructor function \u2014 three real differences: 1. A class cannot be called without new (throws TypeError ); a constructor function silently pollutes the global object. 2. Class methods are non enumerable (hidden from for...in ). 3. Classes are not hoisted in a usable way (TDZ). static vs instance: static belongs to the class ( Student.fromApi(...) ), instance methods belong to objects ( student.mailto() ). student.fromApi is undefined . Why use a class for API data? (Assignment 12's rationale) Drops fields you do not need (the API sends address , phone , company ). One place to change if the API renames a field \u2014 only fromApi edits. Methods keep display logic on the object ( student.mailto() ). this depends on call site: method call \u2192 the object; plain function \u2192 undefined in strict mode; arrow \u2192 enclosing scope. JSON: JSON.stringify(obj) object \u2192 string, JSON.parse(str) string \u2192 object. JSON is a string format, not an object. JSON.parse throws on malformed input, so wrap it in try/catch . In your work A12 \u2014 class Student with constructor , two statics, two instance methods. A10/A11 \u2014 localStorage with JSON.stringify / parse in try/catch . Probable questions Define a class with a constructor and a method. class Student { constructor(id, name) { this.id = id; this.name = name; } greet() { return 'Hi ' + this.name; } } static vs instance method. A static method is called on the class itself, such as Student.fromApi(...) . An instance method is called on an object, such as student.mailto() . Class vs constructor function \u2014 give differences. A class cannot be called without new , its methods are non enumerable, and it is not usably hoisted. A constructor function allows all three and can silently pollute the global object. What does new do? Creates an empty object, sets its prototype, binds this , runs the constructor, returns the object. JSON.parse vs JSON.stringify . stringify turns an object into a JSON string for storage or sending; parse turns a JSON string back into an object. Why wrap JSON.parse in try/catch ? It throws on malformed input, so corrupt stored data would break the whole script without a catch."}, {"slug": "13-asynchronous-js-fetch-promises", "title": "Asynchronous JS: fetch & Promises", "num": "13", "text": "Theory Why async? JavaScript is single threaded . A synchronous network call would freeze the entire page. Async work is handed to the browser, and the callback is queued for when it finishes. Event loop (one line version): call stack runs code; completed async work waits in the task queue; the loop moves queued callbacks onto the stack only when it is empty. Microtasks (promises) jump ahead of macrotasks ( setTimeout ). Promise states: pending \u2192 fulfilled or rejected . Once settled it never changes. The chain \u2014 Assignment 12's core: js fetch(API_URL) .then(function (response) { if (!response.ok) { // \u2190 ESSENTIAL throw new Error('Request failed with status ' + response.status); } return response.json(); // returns another promise }) .then(function (data) { const students = data.filter(Student.isValid).map(Student.fromApi); showStudents(students); }) .catch(function (error) { // any failure above setStatus('Could not load: ' + error.message, 'error'); }) .finally(function () { // always, either way loadBtn.disabled = false; }); The single most important exam point: fetch() does not reject on HTTP errors. A 404 or 500 still resolves . fetch only rejects on a network failure (no connection, DNS failure, CORS block). You must check response.ok and throw manually. Without that check, a 500 falls through and .json() fails with a confusing parse error instead of a clear status message. What each link does Method Runs when Returns .then(fn) Previous step fulfilled A new promise .catch(fn) Any earlier step rejected or threw A new promise .finally(fn) Always \u2014 success or failure Passes the result through .finally() is for cleanup that must happen regardless: re enabling a button, hiding a spinner, saying \"request completed\". It receives no arguments \u2014 it does not know whether things succeeded. Response methods: .json() , .text() , .blob() \u2014 each returns a promise , which is why there are two .then() s. Returning inside .then() matters: js return showStudents(students).then(...) // chain waits for the rows to render showStudents(students); // chain does NOT wait \u2014 bug async / await \u2014 sugar over the same promises: js async function load() { try { const res = await fetch(url); if (!res.ok) throw new Error('...'); const data = await res.json(); } catch (e) { ... } finally { ... } } An async function always returns a promise . await only works inside async . The forEach trap (this bit you hit for real): js await items.forEach(async (item) = { // \u2717 does NOT wait await wait(100); }); forEach ignores whatever its callback returns , so awaiting inside it does not pause the loop \u2014 all callbacks start at once. Use a for...of loop or chain promises instead. I measured this in your Assignment 12: all 10 rows appeared at 25ms instead of staggering. Callback hell \u2192 promises \u2192 async/await is the historical progression; promises solved deep nesting via chaining. AJAX = updating part of a page without a full reload. fetch is the modern API; XMLHttpRequest is the older one. CORS: a browser security rule blocking cross origin requests unless the server sends Access Control Allow Origin . JSONPlaceholder sends a permissive header, which is why your page works from file:// . In your work Assignment 12 \u2014 full chain, response.ok check, four distinct error paths, .finally() with a visible completion line, and staggered row rendering via chained promises. Probable questions Why is async programming needed in JS? Single thread; avoid blocking. What are the three promise states? Pending, then either fulfilled or rejected. Once settled the state never changes again. Write a fetch with .then() , .catch() and .finally() . fetch(url).then(r = { if (!r.ok) throw new Error(r.status); return r.json(); }).then(showData).catch(showError).finally(hideSpinner); Does fetch reject on a 404? No \u2014 explain response.ok . Difference between .then() and .finally() . .then runs only on success and receives the value; .finally runs on both success and failure, receives no arguments, and is for cleanup. Why does response.json() need its own .then() ? It returns a promise. Convert a promise chain to async / await . Mark the function async , await each promise, and replace .catch / .finally with try / catch / finally . What is AJAX? What is CORS? AJAX is updating part of a page without a full reload. CORS is the browser rule blocking cross origin requests unless the server sends an Access Control Allow Origin header."}, {"slug": "14-quick-reference-tables", "title": "Quick-reference tables", "num": "14", "text": "Must memorise numbers & facts Fact Value Falsy values false, 0, \"\", null, undefined, NaN, 0n Promise states pending, fulfilled, rejected Event phases capturing, target, bubbling Box model layers content, padding, border, margin Margin shorthand top, right, bottom, left (clockwise) <main per page Exactly one Specificity order inline id class type fetch rejects on Network failure only \u2014 not HTTP errors dragover needs preventDefault() forEach returns undefined (ignores callback returns) CSS property \u2192 purpose Need Property Predictable widths box sizing: border box Centre a block margin: 0 auto Centre anything display:flex; justify content:center; align items:center Element above others position + z index Hide but keep space visibility: hidden Hide completely display: none Responsive columns repeat(auto fit, minmax(200px, 1fr)) Screen reader only clip path: inset(50%) + 1px size JS \"which one do I use\" Need Use Safe text insert textContent Element by CSS selector querySelector Handle clicks on many items Delegation + event.target Nearest matching ancestor closest() Toggle a state class classList.toggle() Persist across refresh localStorage + JSON.stringify Remove an element .remove() Always run cleanup .finally()"}, {"slug": "15-exam-strategy", "title": "Exam strategy", "num": "15", "text": "Likely paper structure: short answers (definitions, comparisons) \u2192 code snippets (write CSS for X, write JS to do Y) \u2192 output prediction \u2192 one longer \"explain and justify\" question. The comparisons most likely to appear \u2014 have a one line answer ready for each: GET/POST \u00b7 id/class \u00b7 block/inline \u00b7 margin/padding \u00b7 content box/border box \u00b7 relative/absolute \u00b7 flex/grid \u00b7 var/let/const \u00b7 ==/=== \u00b7 innerHTML/textContent \u00b7 target/currentTarget \u00b7 .then/.catch/.finally \u00b7 declaration/expression/arrow Code questions \u2014 write the comment too. Markers award method marks for showing you know why ( / preventDefault stops the page reloading / ). Three \"gotcha\" answers that score well: 1. fetch does not reject on 404/500 \u2014 check response.ok . 2. dragover needs preventDefault() or drop never fires. 3. await inside forEach does not wait. If you forget a property name, describe the behaviour and name the concept. Partial credit is real. Diagrams: the box model and the three event phases are quick to sketch and often worth easy marks. From your own assignments, be ready to explain: A04 \u2014 why global border box A06 \u2014 why the dropdown parent needs position: relative A07 \u2014 why named grid areas simplify media queries A09 \u2014 the three function forms and hoisting A10 \u2014 why one delegated listener instead of per item listeners A11 \u2014 why the drop handler changes data rather than moving DOM nodes A12 \u2014 why response.ok must be checked manually Good luck. The strongest preparation is being able to open any one of your twelve assignments and explain every line in it."}];
+var QUIZ  = [{"q": "Define semantic HTML and give three benefits.", "a": "Choosing elements for what content means, not how it looks. Benefits: accessibility, SEO, maintainability.", "topic": "HTML foundations & semantic markup", "slug": "1-html-foundations-semantic-markup"}, {"q": "Difference between <section> and <div>?", "a": "<section> carries meaning and", "topic": "HTML foundations & semantic markup", "slug": "1-html-foundations-semantic-markup"}, {"q": "Why <!DOCTYPE html>?", "a": "Standards mode; without it browsers use quirks mode", "topic": "HTML foundations & semantic markup", "slug": "1-html-foundations-semantic-markup"}, {"q": "Block vs inline with examples.", "a": "Block starts on a new line and fills the width, and respects width/height: div, p, h1, ul, section. Inline flows within a line and ignores width/height: span, a, strong, em.", "topic": "HTML foundations & semantic markup", "slug": "1-html-foundations-semantic-markup"}, {"q": "Write the skeleton of a valid HTML5 page.", "a": "<!DOCTYPE html>, <html lang>, <head> with charset + viewport + title, then <body>.", "topic": "HTML foundations & semantic markup", "slug": "1-html-foundations-semantic-markup"}, {"q": "What does alt do?", "a": "Text alternative for screen readers and for when the", "topic": "HTML foundations & semantic markup", "slug": "1-html-foundations-semantic-markup"}, {"q": "GET vs POST.", "a": "GET puts data in the URL, is limited in length, bookmarkable and cacheable, for reads. POST puts data in the request body, has no practical limit, is not cached, for anything that changes state.", "topic": "Forms & input validation", "slug": "2-forms-input-validation"}, {"q": "Purpose of <label for>?", "a": "Accessibility + enlarged click target.", "topic": "Forms & input validation", "slug": "2-forms-input-validation"}, {"q": "Difference between name and id?", "a": "name submits, id identifies.", "topic": "Forms & input validation", "slug": "2-forms-input-validation"}, {"q": "Why do radio buttons need the same name?", "a": "It makes them one group so only", "topic": "Forms & input validation", "slug": "2-forms-input-validation"}, {"q": "List five input types with purposes.", "a": "text (free text), email (format check), number (numeric with min/max), date (date picker), radio (one choice from a group), checkbox (independent on/off).", "topic": "Forms & input validation", "slug": "2-forms-input-validation"}, {"q": "Is client-side validation enough?", "a": "No \u2014 explain bypass + server-side.", "topic": "Forms & input validation", "slug": "2-forms-input-validation"}, {"q": "Three ways to include CSS; which is best and why?", "a": "Inline, internal <style>, external <link>. External is best: cached across pages, reusable, keeps structure separate from presentation.", "topic": "CSS fundamentals & selectors", "slug": "3-css-fundamentals-selectors"}, {"q": "Explain the four combinators with examples.", "a": "A B descendant (any depth), A > B direct child, A + B immediately next sibling, A ~ B any later sibling.", "topic": "CSS fundamentals & selectors", "slug": "3-css-fundamentals-selectors"}, {"q": "Calculate specificity of #nav ul li a:hover.", "a": "\u2192 0,1,1,3 (:hover counts as a class)", "topic": "CSS fundamentals & selectors", "slug": "3-css-fundamentals-selectors"}, {"q": "Pseudo-class vs pseudo-element.", "a": "A pseudo-class targets a state (:hover, :first-child), single colon. A pseudo-element targets a part of the element (::before, ::first-line), double colon.", "topic": "CSS fundamentals & selectors", "slug": "3-css-fundamentals-selectors"}, {"q": "em vs rem.", "a": "em is relative to the parent's font size and compounds when nested; rem is relative to the root font size and does not compound.", "topic": "CSS fundamentals & selectors", "slug": "3-css-fundamentals-selectors"}, {"q": "What does \"cascading\" mean?", "a": "Rules combine by origin, specificity, then source order.", "topic": "CSS fundamentals & selectors", "slug": "3-css-fundamentals-selectors"}, {"q": "Draw and label the box model.", "a": "Content in the middle, then padding, then border, then margin on the outside.", "topic": "The box model", "slug": "4-the-box-model"}, {"q": "An element has width:200px; padding:10px; border:2px. Total width under each box-sizing?", "a": "See the section notes above.", "topic": "The box model", "slug": "4-the-box-model"}, {"q": "Why set box-sizing: border-box globally?", "a": "Declared width = rendered width,", "topic": "The box model", "slug": "4-the-box-model"}, {"q": "What is margin collapsing?", "a": "Adjacent vertical margins merge into the larger of the two rather than adding. 30px below plus 20px above gives a 30px gap. Horizontal margins never collapse.", "topic": "The box model", "slug": "4-the-box-model"}, {"q": "display:none vs visibility:hidden.", "a": "display:none removes the element from layout entirely; visibility:hidden hides it but keeps its space reserved.", "topic": "The box model", "slug": "4-the-box-model"}, {"q": "How do you centre a block horizontally?", "a": "margin: 0 auto with a width.", "topic": "The box model", "slug": "4-the-box-model"}, {"q": "Flexbox vs Grid \u2014 when to use each?", "a": "Flex = 1D, content-driven, good for a nav", "topic": "Flexbox", "slug": "5-flexbox"}, {"q": "justify-content vs align-items.", "a": "justify-content positions items along the main axis; align-items positions them along the cross axis.", "topic": "Flexbox", "slug": "5-flexbox"}, {"q": "What does flex: 1 mean?", "a": "flex-grow:1; flex-shrink:1; flex-basis:0 \u2014 equal share.", "topic": "Flexbox", "slug": "5-flexbox"}, {"q": "Centre a div both ways using flexbox.", "a": "display:flex; justify-content:center; align-items:center on the parent.", "topic": "Flexbox", "slug": "5-flexbox"}, {"q": "What changes if flex-direction: column?", "a": "The axes swap.", "topic": "Flexbox", "slug": "5-flexbox"}, {"q": "Compare the five position values.", "a": "static (default, offsets ignored), relative (offset from normal spot, space kept), absolute (out of flow, against nearest positioned ancestor), fixed (out of flow, against the viewport), sticky (relative until a scroll threshold, then fixed).", "topic": "Positioning & dropdown menus", "slug": "6-positioning-dropdown-menus"}, {"q": "Why does the dropdown parent need position: relative?", "a": "It makes the parent the containing block, so the absolutely positioned menu is placed against it instead of against the page.", "topic": "Positioning & dropdown menus", "slug": "6-positioning-dropdown-menus"}, {"q": "Write CSS for a hover dropdown.", "a": "Parent position:relative; menu position:absolute; top:100%; display:none; z-index:1000; then .dropdown:hover > .dropdown-menu { display:block; }.", "topic": "Positioning & dropdown menus", "slug": "6-positioning-dropdown-menus"}, {"q": "What is z-index and when does it not work?", "a": "Only on positioned elements;", "topic": "Positioning & dropdown menus", "slug": "6-positioning-dropdown-menus"}, {"q": "How do you make a submenu open to the right?", "a": "left: 100%; top: 0.", "topic": "Positioning & dropdown menus", "slug": "6-positioning-dropdown-menus"}, {"q": "absolute vs fixed.", "a": "Both leave the normal flow. Absolute positions against the nearest positioned ancestor and scrolls with the page; fixed positions against the viewport and stays put when scrolling.", "topic": "Positioning & dropdown menus", "slug": "6-positioning-dropdown-menus"}, {"q": "Grid vs Flexbox.", "a": "Grid is two-dimensional, for rows and columns together, layout-driven. Flexbox is one-dimensional, a single row or column, content-driven.", "topic": "CSS Grid", "slug": "7-css-grid"}, {"q": "What is fr?", "a": "A fraction of the remaining free space after fixed tracks.", "topic": "CSS Grid", "slug": "7-css-grid"}, {"q": "Explain grid-template-areas and its benefit.", "a": "It names regions in an ASCII-style map and places elements with grid-area. The benefit is that a media query only redraws the map, so no element needs new positioning rules.", "topic": "CSS Grid", "slug": "7-css-grid"}, {"q": "What does repeat(auto-fit, minmax(200px, 1fr)) do?", "a": "It creates as many columns as will fit, each at least 200px and sharing leftover space equally. A responsive grid with no media query.", "topic": "CSS Grid", "slug": "7-css-grid"}, {"q": "Make an element span two columns.", "a": "grid-column: span 2.", "topic": "CSS Grid", "slug": "7-css-grid"}, {"q": "gap vs margins?", "a": "gap applies only between tracks, with no edge margins", "topic": "CSS Grid", "slug": "7-css-grid"}, {"q": "Difference between var, let and const.", "a": "var is function-scoped and hoisted as undefined; let is block-scoped and reassignable; const is block-scoped and cannot be reassigned, though objects it holds can still be mutated.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "What is hoisting? Give an example where a declaration works and an expression fails.", "a": "Declarations are moved to the top of their scope. Calling sayHi() before function sayHi(){} works; calling fn() before var fn = function(){} throws a TypeError because only the variable is hoisted.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "Declaration vs expression vs arrow.", "a": "A declaration is fully hoisted and callable early. An expression assigns a function to a variable and must be defined first. An arrow is concise, has no own this, arguments or prototype.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "Why can't you always use an arrow function as an event handler?", "a": "No own this.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "== vs === with examples.", "a": "== coerces types, so 5 == \"5\" and 0 == false are true. === compares value and type, so both are false. Prefer ===.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "List the falsy values.", "a": "false, 0, empty string, null, undefined, NaN and 0n. Everything else is truthy, including empty arrays and objects.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "What does trim() do and why use it before validating?", "a": "It removes leading and trailing whitespace, so an entry of only spaces is correctly treated as empty.", "topic": "JavaScript basics & functions", "slug": "8-javascript-basics-functions"}, {"q": "What is the DOM?", "a": "The Document Object Model: the browser's tree-shaped object representation of the page, which JavaScript can read and change.", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "getElementById vs querySelector.", "a": "getElementById takes only an id and is slightly faster; querySelector accepts any CSS selector and returns the first match.", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "innerHTML vs textContent \u2014 which is safer and why?", "a": "textContent is safer because it escapes markup. innerHTML parses its input, so user-typed HTML such as an onerror image would execute, which is an XSS risk.", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "Write JS to create an <li> with text and a class, then append it to a <ul>.", "a": "const li = document.createElement('li'); li.textContent = 'Task'; li.classList.add('item'); list.appendChild(li);", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "What does classList.toggle() return?", "a": "A boolean giving the new state: true if the class is now present, false if it was removed.", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "How do you remove an element?", "a": "element.remove(), or the older parent.removeChild(child).", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "Live vs static collection.", "a": "getElementsByClassName returns a live HTMLCollection that updates as the DOM changes; querySelectorAll returns a static NodeList snapshot.", "topic": "DOM manipulation", "slug": "9-dom-manipulation"}, {"q": "What is event bubbling? Name the three phases.", "a": "Bubbling is the event travelling from the target up to the root. The phases are capturing (root to target), target, then bubbling (target to root).", "topic": "Events & event delegation", "slug": "10-events-event-delegation"}, {"q": "What is event delegation and why use it?", "a": "Attaching one listener to a parent and using event.target to identify the child. It keeps working for elements added later, uses less memory, and needs no cleanup when children are destroyed.", "topic": "Events & event delegation", "slug": "10-events-event-delegation"}, {"q": "event.target vs event.currentTarget.", "a": "target is the element actually clicked; currentTarget is the element the listener is attached to.", "topic": "Events & event delegation", "slug": "10-events-event-delegation"}, {"q": "preventDefault() vs stopPropagation().", "a": "preventDefault cancels the browser's default action, such as a form reload. stopPropagation stops the event travelling further up the tree.", "topic": "Events & event delegation", "slug": "10-events-event-delegation"}, {"q": "Why call preventDefault() on form submit?", "a": "Without it the page reloads, which discards the JavaScript state you just built.", "topic": "Events & event delegation", "slug": "10-events-event-delegation"}, {"q": "Three ways to attach a handler; which is best?", "a": "Inline onclick attribute, the element.onclick property, and addEventListener. The last is best: it allows many handlers and finer control.", "topic": "Events & event delegation", "slug": "10-events-event-delegation"}, {"q": "List the drag-and-drop events in order.", "a": "dragstart on the source, then dragover and dragenter/dragleave on the target, then drop, and finally dragend on the source.", "topic": "Drag and drop", "slug": "11-drag-and-drop"}, {"q": "Why is preventDefault() needed in dragover?", "a": "Elements reject drops by default. Calling preventDefault cancels that rejection and marks the element a valid drop target; without it the drop event never fires.", "topic": "Drag and drop", "slug": "11-drag-and-drop"}, {"q": "How is data passed from source to target?", "a": "dataTransfer, strings only.", "topic": "Drag and drop", "slug": "11-drag-and-drop"}, {"q": "Why store an ID rather than the element?", "a": "dataTransfer can only hold strings, so you store the id and look the object up again in the drop handler.", "topic": "Drag and drop", "slug": "11-drag-and-drop"}, {"q": "Which event fires even when a drag is cancelled?", "a": "dragend.", "topic": "Drag and drop", "slug": "11-drag-and-drop"}, {"q": "Define a class with a constructor and a method.", "a": "class Student { constructor(id, name) { this.id = id; this.name = name; } greet() { return 'Hi ' + this.name; } }", "topic": "Objects & classes", "slug": "12-objects-classes"}, {"q": "static vs instance method.", "a": "A static method is called on the class itself, such as Student.fromApi(...). An instance method is called on an object, such as student.mailto().", "topic": "Objects & classes", "slug": "12-objects-classes"}, {"q": "Class vs constructor function \u2014 give differences.", "a": "A class cannot be called without new, its methods are non-enumerable, and it is not usably hoisted. A constructor function allows all three and can silently pollute the global object.", "topic": "Objects & classes", "slug": "12-objects-classes"}, {"q": "What does new do?", "a": "Creates an empty object, sets its prototype, binds", "topic": "Objects & classes", "slug": "12-objects-classes"}, {"q": "JSON.parse vs JSON.stringify.", "a": "stringify turns an object into a JSON string for storage or sending; parse turns a JSON string back into an object.", "topic": "Objects & classes", "slug": "12-objects-classes"}, {"q": "Why wrap JSON.parse in try/catch?", "a": "It throws on malformed input, so corrupt stored data would break the whole script without a catch.", "topic": "Objects & classes", "slug": "12-objects-classes"}, {"q": "Why is async programming needed in JS?", "a": "Single thread; avoid blocking.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "What are the three promise states?", "a": "Pending, then either fulfilled or rejected. Once settled the state never changes again.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "Write a fetch with .then(), .catch() and .finally().", "a": "fetch(url).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(showData).catch(showError).finally(hideSpinner);", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "Does fetch reject on a 404?", "a": "No \u2014 explain response.ok.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "Difference between .then() and .finally().", "a": ".then runs only on success and receives the value; .finally runs on both success and failure, receives no arguments, and is for cleanup.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "Why does response.json() need its own .then()?", "a": "It returns a promise.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "Convert a promise chain to async/await.", "a": "Mark the function async, await each promise, and replace .catch/.finally with try/catch/finally.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}, {"q": "What is AJAX? What is CORS?", "a": "AJAX is updating part of a page without a full reload. CORS is the browser rule blocking cross-origin requests unless the server sends an Access-Control-Allow-Origin header.", "topic": "Asynchronous JS: fetch & Promises", "slug": "13-asynchronous-js-fetch-promises"}];
+
+/* ---------- theme ---------- */
+
+var root = document.documentElement;
+var saved = null;
+try { saved = localStorage.getItem('iwp-notes-theme'); } catch (e) {}
+if (saved) { root.setAttribute('data-theme', saved); }
+
+document.getElementById('theme-btn').addEventListener('click', function () {
+  var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('iwp-notes-theme', next); } catch (e) {}
+});
+
+/* ---------- sidebar (small screens) ---------- */
+
+var sidebar = document.getElementById('sidebar');
+
+document.getElementById('menu-btn').addEventListener('click', function () {
+  sidebar.classList.toggle('open');
+});
+
+sidebar.addEventListener('click', function (e) {
+  if (e.target.closest('a') && window.innerWidth <= 1000) {
+    sidebar.classList.remove('open');
+  }
+});
+
+/* ---------- collapse ---------- */
+
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('.collapse-btn');
+  if (!btn) { return; }
+  var open = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', String(!open));
+  document.getElementById(btn.getAttribute('aria-controls')).hidden = open;
+});
+
+var allOpen = true;
+document.getElementById('expand-btn').addEventListener('click', function () {
+  allOpen = !allOpen;
+  document.querySelectorAll('.collapse-btn').forEach(function (btn) {
+    btn.setAttribute('aria-expanded', String(allOpen));
+    document.getElementById(btn.getAttribute('aria-controls')).hidden = !allOpen;
+  });
+});
+
+/* ---------- copy buttons on code blocks ---------- */
+
+document.querySelectorAll('pre').forEach(function (pre) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'copy-btn';
+  b.textContent = 'Copy';
+  b.addEventListener('click', function () {
+    var code = pre.querySelector('code');
+    var text = code ? code.textContent : pre.textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function () {
+        b.textContent = 'Copied';
+        b.classList.add('done');
+        setTimeout(function () { b.textContent = 'Copy'; b.classList.remove('done'); }, 1400);
+      });
+    }
+  });
+  pre.appendChild(b);
+});
+
+/* ---------- search ---------- */
+
+var searchBox = document.getElementById('search');
+var noResults = document.getElementById('no-results');
+var note = document.getElementById('search-note');
+var intro = document.getElementById('intro');
+
+function clearMarks(el) {
+  el.querySelectorAll('mark').forEach(function (m) {
+    m.replaceWith(document.createTextNode(m.textContent));
+  });
+  el.normalize();
+}
+
+function highlight(el, term) {
+  var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+    acceptNode: function (n) {
+      if (!n.nodeValue.trim()) { return NodeFilter.FILTER_REJECT; }
+      if (n.parentNode.closest('mark, script, style')) { return NodeFilter.FILTER_REJECT; }
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  var targets = [];
+  var node;
+  while ((node = walker.nextNode())) {
+    if (node.nodeValue.toLowerCase().indexOf(term) !== -1) { targets.push(node); }
+  }
+  targets.forEach(function (n) {
+    var frag = document.createDocumentFragment();
+    var rest = n.nodeValue;
+    var idx;
+    while ((idx = rest.toLowerCase().indexOf(term)) !== -1) {
+      frag.appendChild(document.createTextNode(rest.slice(0, idx)));
+      var mk = document.createElement('mark');
+      mk.textContent = rest.substr(idx, term.length);
+      frag.appendChild(mk);
+      rest = rest.slice(idx + term.length);
+    }
+    frag.appendChild(document.createTextNode(rest));
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+
+var searchTimer;
+
+searchBox.addEventListener('input', function () {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(runSearch, 140);
+});
+
+function runSearch() {
+  var term = searchBox.value.trim().toLowerCase();
+  var sections = document.querySelectorAll('.section');
+
+  sections.forEach(function (s) { clearMarks(s); });
+
+  if (term.length < 2) {
+    sections.forEach(function (s) { s.classList.remove('hidden'); });
+    noResults.style.display = 'none';
+    note.style.display = 'none';
+    intro.style.display = '';
+    return;
+  }
+
+  intro.style.display = 'none';
+  var hits = 0;
+
+  sections.forEach(function (s) {
+    var hay = (s.dataset.title + ' ' + s.textContent).toLowerCase();
+    var match = hay.indexOf(term) !== -1;
+    s.classList.toggle('hidden', !match);
+    if (match) {
+      hits++;
+      /* make sure a matching section is open so the hit is visible */
+      var btn = s.querySelector('.collapse-btn');
+      btn.setAttribute('aria-expanded', 'true');
+      document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+      highlight(s.querySelector('.section-body'), term);
+      highlight(s.querySelector('.sec-title'), term);
+    }
+  });
+
+  noResults.style.display = hits ? 'none' : 'block';
+  note.style.display = 'block';
+  note.textContent = hits
+    ? hits + ' section' + (hits === 1 ? '' : 's') + ' matching "' + searchBox.value.trim() + '"'
+    : '';
+}
+
+/* keyboard: "/" focuses search, Escape clears it */
+document.addEventListener('keydown', function (e) {
+  if (e.key === '/' && document.activeElement !== searchBox) {
+    e.preventDefault();
+    searchBox.focus();
+  } else if (e.key === 'Escape') {
+    if (document.getElementById('quiz').classList.contains('open')) {
+      closeQuiz();
+    } else if (document.activeElement === searchBox) {
+      searchBox.value = '';
+      runSearch();
+      searchBox.blur();
+    }
+  }
+});
+
+/* ---------- active section + reading progress ---------- */
+
+var navLinks = {};
+document.querySelectorAll('[data-nav]').forEach(function (a) {
+  navLinks[a.dataset.nav] = a;
+});
+
+var fill = document.getElementById('progress-fill');
+var pct = document.getElementById('progress-pct');
+
+function onScroll() {
+  var doc = document.documentElement;
+  var max = doc.scrollHeight - doc.clientHeight;
+  var p = max > 0 ? Math.min(100, Math.round((doc.scrollTop / max) * 100)) : 0;
+  fill.style.width = p + '%';
+  pct.textContent = p;
+
+  var current = null;
+  document.querySelectorAll('.section').forEach(function (s) {
+    if (s.classList.contains('hidden')) { return; }
+    if (s.getBoundingClientRect().top <= 120) { current = s.id; }
+  });
+
+  Object.keys(navLinks).forEach(function (k) {
+    navLinks[k].classList.toggle('active', k === current);
+  });
+}
+
+window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('resize', onScroll);
+onScroll();
+
+/* ---------- flashcard quiz ---------- */
+
+var overlay = document.getElementById('quiz');
+var order = QUIZ.map(function (_, i) { return i; });
+var pos = 0;
+
+function shuffle() {
+  for (var i = order.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = order[i]; order[i] = order[j]; order[j] = t;
+  }
+  pos = 0;
+  showCard();
+}
+
+function showCard() {
+  if (!QUIZ.length) { return; }
+  var card = QUIZ[order[pos]];
+  document.getElementById('quiz-topic').textContent = card.topic;
+  document.getElementById('quiz-q').textContent = card.q;
+  var a = document.getElementById('quiz-a');
+  a.textContent = card.a;
+  a.hidden = true;
+  document.getElementById('reveal-btn').textContent = 'Show answer';
+  document.getElementById('quiz-i').textContent = pos + 1;
+  document.getElementById('quiz-n').textContent = QUIZ.length;
+}
+
+function openQuiz() {
+  overlay.classList.add('open');
+  showCard();
+}
+
+function closeQuiz() { overlay.classList.remove('open'); }
+
+document.getElementById('quiz-btn').addEventListener('click', openQuiz);
+document.getElementById('close-quiz').addEventListener('click', closeQuiz);
+document.getElementById('shuffle-btn').addEventListener('click', shuffle);
+
+document.getElementById('reveal-btn').addEventListener('click', function () {
+  var a = document.getElementById('quiz-a');
+  a.hidden = !a.hidden;
+  this.textContent = a.hidden ? 'Show answer' : 'Hide answer';
+});
+
+document.getElementById('next-btn').addEventListener('click', function () {
+  pos = (pos + 1) % QUIZ.length;
+  showCard();
+});
+
+overlay.addEventListener('click', function (e) {
+  if (e.target === overlay) { closeQuiz(); }
+});
+
+shuffle();
+</script>
+</body>
+</html>
